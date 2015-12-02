@@ -3,6 +3,7 @@ package cn.com.dhcc.adam.dailytask.datang;
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class DailyReportTemplate implements IReportTemplate {
 	 * @return
 	 */
 	public TextFieldBuilder<String>  title(String title){
-		StyleBuilder titleStyle = stl.style().setAlignment(HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE).setFontSize(22).bold();
+		StyleBuilder titleStyle = stl.style().setAlignment(HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE).setFontSize(22).bold().setPadding(16);
 		return cmp.text(title).setStyle(titleStyle);
 	}
 	/**
@@ -88,11 +89,13 @@ public class DailyReportTemplate implements IReportTemplate {
 	}
 
 	public ComponentBuilder<?, ?> pageHeader(){
-		StyleBuilder headerStyle =stl.style().setAlignment(HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE).setFontSize(10);
+		StyleBuilder headerStyle =stl.style().setAlignment(HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE).setFontSize(10)
+				.setForegroundColor(Color.LIGHT_GRAY);
 		return cmp.text ("©东华软件").setStyle(headerStyle);
 	}
 	public ComponentBuilder<?, ?> pageFooter(){
-		StyleBuilder footerStyle =stl.style().setAlignment(HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE).setFontSize(10);
+		StyleBuilder footerStyle =stl.style().setAlignment(HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE).setFontSize(10)
+				.setForegroundColor(Color.LIGHT_GRAY);
 		return cmp.text ("©东华软件").setStyle(footerStyle);
 	}
 	public static void main(String[] args) {
