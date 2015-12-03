@@ -41,7 +41,7 @@ public class ReportQuery {
 		preWeek.add(Calendar.WEEK_OF_MONTH, -1);
 		preWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 		String preWeekFirstDay = weeklyDateTimeFormat.format(preWeek.getTime());
-		preWeek.add(Calendar.DAY_OF_YEAR, 6);
+		preWeek.add(Calendar.DAY_OF_YEAR, preWeek.getActualMaximum(Calendar.DAY_OF_WEEK)-1);
 		String preWeekLastDay = weeklyDateTimeFormat.format(preWeek.getTime());
 		resultMap.put("dateTime",  preWeekFirstDay + "-" + preWeekLastDay);
 	}

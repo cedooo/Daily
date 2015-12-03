@@ -1,0 +1,20 @@
+{
+	daily:{
+	    description:"日报",
+	    maps:[
+			{fieldName:"infoSysNum", description:"信息系统个数", sql:""}	        
+	    ]
+	},
+	monthly:{ 
+		description:"周报",
+	    maps:[
+			{fieldName:"infoSysNum", description:"信息系统个数", sql:""}	        
+	    ]
+	},
+	monthly:{ 
+		description:"月报",
+	    maps:[
+			{fieldName:"infoSysNum", description:"信息系统个数", sql:""}	        
+	    ]
+	}
+}
