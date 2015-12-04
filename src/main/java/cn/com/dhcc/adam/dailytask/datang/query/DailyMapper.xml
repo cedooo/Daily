@@ -2,11 +2,11 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="cn.com.dhcc.adam.dailytask.datang.query">
+<mapper namespace="cn.com.dhcc.adam.dailytask.datang.query.daily">
 
-	<select id="infoSysNum" resultMap="String">
+	<select id="infoSysNum" resultType="String" parameterType="int">
 		<![CDATA[
-		select * from alarmmgrrm limit 10
+		select * from alarmmgrrm limit #{num}
 		]]>
 	</select>
 
