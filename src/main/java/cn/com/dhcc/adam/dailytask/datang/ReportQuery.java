@@ -11,13 +11,13 @@ public class ReportQuery {
 	private SimpleDateFormat dailyDateTimeFormat = new SimpleDateFormat("MM月dd日");
 	private SimpleDateFormat weeklyDateTimeFormat = new SimpleDateFormat("MM月dd日(E)");
 	private SimpleDateFormat monthlyDateTimeFormat = new SimpleDateFormat("MM月dd日");
-	public ReportQuery(Class<? extends IReportTemplate> irt){
+	public ReportQuery(Class<? extends IReportBuilder> irt){
 		resultMap = new HashMap<String, Object>();
-		if(irt == DailyReportTemplate.class){
+		if(irt == DailyReportBuilder.class){
 			daily();
-		}else if(irt  == WeeklyReportTemplate.class){
+		}else if(irt  == WeeklyReportBuilder.class){
 			weekly();
-		}else if(irt  == MonthlyReportTemplate.class){
+		}else if(irt  == MonthlyReportBuilder.class){
 			monthly();
 		}
 	}

@@ -7,7 +7,7 @@ import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
  * @author cedo
  *
  */
-public interface IReportTemplate  {
+public interface IReportBuilder  {
 	/**
 	 * 构建报表
 	 * @return JasperReportBuilder

@@ -1,0 +1,7 @@
+{
+	"name":"daily",
+    "description":"日报",
+    "sqlmaps":[
+		{"fieldName":"infoSysNum", "description":"信息系统个数", "sql":""}	        
+    ]
+}

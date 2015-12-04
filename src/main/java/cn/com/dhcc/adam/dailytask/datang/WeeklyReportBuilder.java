@@ -16,12 +16,12 @@ import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 
 /**
- * 中国大唐集团公司信息系统运行月总结报告
+ * 中国大唐集团公司信息系统运行周总结报告
  * 
  * @author cedo
  * 
  */
-public class MonthlyReportTemplate implements IReportTemplate {
+public class WeeklyReportBuilder implements IReportBuilder {
 	private ReportQuery reportQuery;
 	private String title;
 	private String dateTime;
@@ -44,9 +44,9 @@ public class MonthlyReportTemplate implements IReportTemplate {
 		this.contents = contents;
 	}
 
-	public MonthlyReportTemplate() {
-		reportQuery = new ReportQuery(MonthlyReportTemplate.class);
-		title = "中国大唐集团公司信息系统运月总结报告";
+	public WeeklyReportBuilder() {
+		reportQuery = new ReportQuery(WeeklyReportBuilder.class);
+		title = "中国大唐集团公司信息系统运行周总结报告";
 		dateTime = reportQuery.query("dateTime");
 		overView = "本期，集团公司信息系统总体运行状况稳定/略有提升/略有下降，系统安全状况正常/基本正常，未发生/发生 0 次重大异常事件。";
 		contents = new LinkedHashMap<String, String>();
@@ -57,12 +57,12 @@ public class MonthlyReportTemplate implements IReportTemplate {
 				+ "按系统类别划分，重要资源管控类140个，共享交换平台类 10 个，基础设施类 46 个，主营业务管控类 52 个，公用应用类 231 个，其它类 11 个。";
 		contents.put(contentsTitleOne, contentsOne);
 		String contentsTitleTwo = "二、信息系统运行情况监测";
-		String contentsTwo = "（一）信息系统报警（月）\n"
+		String contentsTwo = "（一）信息系统报警（周）\n"
 				+ "本期，信息系统报警总量 1034 条，一般报警 31 条，次要告警 1054 ，主要报警 53 条，严重报警573 条。\n"
 				+ "集团公司总部系统报警 274 条其中网络不通报警 105条，URL报警 7 条，其他报警 14 条。截止到目前总部系统报警处理共0 条。\n"
 				+ "（二）系统不可访问\n"
 				+ "截至目前，信息系统不可访问共 74 个，其中系统网络不通_71 个，系统URL 1 个，其他原因 2 个。\n"
-				+ "（四）系统访问量（月）\n"
+				+ "（四）系统访问量（周）\n"
 				+ "重点监测访问量的信息系统共16个，系统访问量最高的为全面计划，访问量   4851764次。系统访问量最低的为中国大唐集团公司三会管理信息系统，系统访问量 32次。";
 		contents.put(contentsTitleTwo, contentsTwo);
 
@@ -199,6 +199,6 @@ public class MonthlyReportTemplate implements IReportTemplate {
 	}
 
 	public static void main(String[] args) {
-		new MonthlyReportTemplate();
+		new WeeklyReportBuilder();
 	}
 }
