@@ -1,10 +1,15 @@
-package cn.com.dhcc.adam.dailytask.datang;
+package cn.com.dhcc.adam.dailytask.datang.query;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.com.dhcc.adam.dailytask.datang.DailyReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.IReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.MonthlyReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.WeeklyReportBuilder;
 
 public class ReportQuery {
 	private Map<String, Object> resultMap= null;

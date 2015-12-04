@@ -6,6 +6,8 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 import java.awt.Color;
 import java.util.LinkedHashMap;
 
+import cn.com.dhcc.adam.dailytask.datang.query.ReportQuery;
+
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
@@ -13,7 +15,6 @@ import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
-import net.sf.dynamicreports.report.exception.DRException;
 
 /**
  * 中国大唐集团公司信息系统运行日总结报告 模版
@@ -23,7 +24,7 @@ import net.sf.dynamicreports.report.exception.DRException;
  */
 public class DailyReportBuilder implements IReportBuilder {
 	private ReportQuery reportQuery;
-	
+
 	public void setReportQuery(ReportQuery reportQuery) {
 		this.reportQuery = reportQuery;
 	}
@@ -93,22 +94,17 @@ public class DailyReportBuilder implements IReportBuilder {
 	@Override
 	public JasperReportBuilder build() {
 		JasperReportBuilder report = DynamicReports.report();
-		try {
-			report
-			.title(title(title))
-			.title(overview(dateTime, overView))
-			.title(subReport(contents))
-			.pageHeader(pageHeader())
-			//.pageFooter(pageFooter())
-			.show();
-		} catch (DRException e) {
-			e.printStackTrace();
-		}
+		report.title(title(title)).title(overview(dateTime, overView))
+				.title(subReport(contents)).pageHeader(pageHeader())
+				// .pageFooter(pageFooter())
+				// .show()
+				;
 		return report;
 	}
 
 	/**
 	 * 自报表
+	 * 
 	 * @param contents
 	 * @return
 	 */
@@ -185,8 +181,8 @@ public class DailyReportBuilder implements IReportBuilder {
 		StyleBuilder headerStyle = stl
 				.style()
 				.setAlignment(HorizontalAlignment.CENTER,
-						VerticalAlignment.MIDDLE).setFontSize(10).setPadding(10)
-				.setForegroundColor(Color.LIGHT_GRAY);
+						VerticalAlignment.MIDDLE).setFontSize(10)
+				.setPadding(10).setForegroundColor(Color.LIGHT_GRAY);
 		return cmp.text("©东华软件").setStyle(headerStyle);
 	}
 

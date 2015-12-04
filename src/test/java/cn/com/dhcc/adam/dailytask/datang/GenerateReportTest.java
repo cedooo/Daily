@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class GenerateReportTest extends TestCase {
 	private GenerateReport gr = new GenerateReport();
 	public void testBuild() {
-		gr.build(3);
+		gr.build("D:/","test","998",3);
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {

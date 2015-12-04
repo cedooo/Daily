@@ -6,6 +6,8 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 import java.awt.Color;
 import java.util.LinkedHashMap;
 
+import cn.com.dhcc.adam.dailytask.datang.query.ReportQuery;
+
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
@@ -13,7 +15,6 @@ import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
-import net.sf.dynamicreports.report.exception.DRException;
 
 /**
  * 中国大唐集团公司信息系统运行周总结报告
@@ -89,14 +90,11 @@ public class WeeklyReportBuilder implements IReportBuilder {
 	@Override
 	public JasperReportBuilder build() {
 		JasperReportBuilder report = DynamicReports.report();
-		try {
-			report.title(title(title)).title(overview(dateTime, overView))
-					.title(subReport(contents)).pageHeader(pageHeader())
-					// .pageFooter(pageFooter())
-					.show();
-		} catch (DRException e) {
-			e.printStackTrace();
-		}
+		report.title(title(title)).title(overview(dateTime, overView))
+				.title(subReport(contents)).pageHeader(pageHeader())
+				// .pageFooter(pageFooter())
+				//.show()
+				;
 		return report;
 	}
 
