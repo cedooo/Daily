@@ -18,7 +18,7 @@ public class WeeklyReportBuilder extends AbstractReportBuilder{
 	
 
 	public WeeklyReportBuilder() {
-		reportQuery = new ReportQuery(DailyReportBuilder.class);
+		reportQuery = new ReportQuery(WeeklyReportBuilder.class);
 
 		List<String> template = new TxtReportTemplate().getReportString(TXT_TEMPLATE);
 		title = reportPart(template.get(0));

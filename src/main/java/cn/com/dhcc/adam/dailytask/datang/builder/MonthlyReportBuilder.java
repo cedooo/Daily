@@ -17,7 +17,7 @@ public class MonthlyReportBuilder extends AbstractReportBuilder{
 	private final static String TXT_TEMPLATE = "src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template.txt";
 	
 	public MonthlyReportBuilder() {
-		reportQuery = new ReportQuery(DailyReportBuilder.class);
+		reportQuery = new ReportQuery(MonthlyReportBuilder.class);
 
 		List<String> template = new TxtReportTemplate().getReportString(TXT_TEMPLATE);
 		title = reportPart(template.get(0));
