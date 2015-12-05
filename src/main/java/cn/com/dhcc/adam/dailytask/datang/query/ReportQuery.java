@@ -67,6 +67,9 @@ public class ReportQuery {
 		
 		for (MappedStatement mappedStatement : mappedStatements) {
 			SqlSource sqlSource = mappedStatement.getSqlSource();
+			/**
+			 * BoundSql bsql暂时只支持传入报表类型作为参数
+			 */
 			BoundSql bsql = sqlSource.getBoundSql(parameter);
 
 			//TODO 从数据库查询对应指标

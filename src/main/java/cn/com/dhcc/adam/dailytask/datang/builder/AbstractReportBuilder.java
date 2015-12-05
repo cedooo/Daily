@@ -38,7 +38,7 @@ public class AbstractReportBuilder implements IReportBuilder {
 	}
 
 	/**
-	 * 自报表
+	 * 子报表
 	 * 
 	 * @param contents
 	 * @return
@@ -55,6 +55,9 @@ public class AbstractReportBuilder implements IReportBuilder {
 		StyleBuilder detailsStyle = stl.style().setFontSize(16)
 				.setPadding(2 * 14).setFirstLineIndent(2 * 14);
 		int counter = 0;
+		/**
+		 * 子报表内容设置
+		 */
 		for (String key : contents.keySet()) {
 			JasperReportBuilder report = DynamicReports.report();
 			report.title(cmp.text(key).setStyle(paTitleStyle)).columnHeader(
