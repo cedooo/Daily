@@ -31,5 +31,18 @@
 			<artifactId>mybatis</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+		<!-- DHCC jar -->
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-core</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-typ-model</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

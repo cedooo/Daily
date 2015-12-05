@@ -5,7 +5,7 @@
 <mapper namespace="query">
 
 	<select id="infoSysNum" resultType="String" parameterType="int">
-		select *
+		select infoSysNum
 		from alarmmgrrm
 		<where>
 			time between
@@ -22,7 +22,7 @@
 		</where>
 	</select>
 	<select id="infoSysNumChange" resultType="String" parameterType="int">
-		select *
+		select infoSysNumChange
 		from alarmmgrrm
 		<where>
 			time between

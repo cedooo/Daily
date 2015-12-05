@@ -1,5 +1,10 @@
 package cn.com.dhcc.adam.dailytask.datang.query;
 
+import itims.extend.DomainManager;
+import itims.share.db.ConnException;
+import itims.share.db.DBException;
+import itims.share.db.JdbcAbstractTemplate;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -27,13 +32,13 @@ public class ReportQuery {
 	public ReportQuery(Class<? extends IReportBuilder> irt){
 		resultMap = new HashMap<String, Object>();
 		if(irt == DailyReportBuilder.class){
-			daily();
+			dailyDateTime();
 			doQuery(GenerateReport.TYPE_DAILY);
 		}else if(irt  == WeeklyReportBuilder.class){
-			weekly();
+			weeklyDateTime();
 			doQuery(GenerateReport.TYPE_WEEKLY);
 		}else if(irt  == MonthlyReportBuilder.class){
-			monthly();
+			monthlyDateTime();
 			doQuery(GenerateReport.TYPE_MONTHLY);
 		}
 	}
@@ -45,32 +50,6 @@ public class ReportQuery {
 	public String query(String attribute){
 		return resultMap.get(attribute).toString();
 	}
-	private void daily(){
-		Calendar preDay =  Calendar.getInstance();
-		preDay.setTime(new Date());
-		preDay.add(Calendar.DAY_OF_YEAR, -1);
-		resultMap.put("dateTime", dailyDateTimeFormat.format(preDay.getTime()));
-	}
-	private void weekly(){
-		Calendar preWeek =  Calendar.getInstance();
-		preWeek.setTime(new Date());
-		preWeek.add(Calendar.WEEK_OF_MONTH, -1);
-		preWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		String preWeekFirstDay = weeklyDateTimeFormat.format(preWeek.getTime());
-		preWeek.add(Calendar.DAY_OF_YEAR, preWeek.getActualMaximum(Calendar.DAY_OF_WEEK)-1);
-		String preWeekLastDay = weeklyDateTimeFormat.format(preWeek.getTime());
-		resultMap.put("dateTime",  preWeekFirstDay + "-" + preWeekLastDay);
-	}
-	private void monthly(){
-		Calendar preMonth =  Calendar.getInstance();
-		preMonth.setTime(new Date());
-		preMonth.add(Calendar.MONTH, -1);
-		preMonth.set(Calendar.DAY_OF_MONTH, 1);
-		String preMonthFirstDay = monthlyDateTimeFormat.format(preMonth.getTime());
-		preMonth.add(Calendar.DAY_OF_MONTH, preMonth.getActualMaximum(Calendar.DAY_OF_MONTH)-1);
-		String preMonthLastDay = monthlyDateTimeFormat.format(preMonth.getTime());
-		resultMap.put("dateTime",  preMonthFirstDay + "-" + preMonthLastDay);
-	}
 	/**
 	 * 查询所有属性
 	 * @param type 报表类型
@@ -80,14 +59,56 @@ public class ReportQuery {
 		Configuration config = mapperBuilder.getConfig();
 		Collection<MappedStatement> mappedStatements = config.getMappedStatements();
 		Integer parameter = type; 
-		Map<? extends String, ? extends Object> queryResultMap = new HashMap<String, Object>();
+		Map<String, Object> queryResultMap = new HashMap<String, Object>();
+		
+
+		JdbcAbstractTemplate jat = null;
+		jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
+		
 		for (MappedStatement mappedStatement : mappedStatements) {
 			SqlSource sqlSource = mappedStatement.getSqlSource();
 			BoundSql bsql = sqlSource.getBoundSql(parameter);
+
+			//TODO 从数据库查询对应指标
+			try {
+				String value = jat.getString(mappedStatement.getId(), bsql.getSql());
+				queryResultMap.put(mappedStatement.getId(), value);
+			} catch (DBException e) {
+				e.printStackTrace();
+			} catch (ConnException e) {
+				e.printStackTrace();
+			}
 			
 			System.out.println(mappedStatement.getId() + "\n" + bsql.getSql());
 			
 		}
 		resultMap.putAll(queryResultMap);
+	}
+
+	private void dailyDateTime(){
+		Calendar preDay =  Calendar.getInstance();
+		preDay.setTime(new Date());
+		preDay.add(Calendar.DAY_OF_YEAR, -1);
+		resultMap.put("dateTime", dailyDateTimeFormat.format(preDay.getTime()));
+	}
+	private void weeklyDateTime(){
+		Calendar preWeek =  Calendar.getInstance();
+		preWeek.setTime(new Date());
+		preWeek.add(Calendar.WEEK_OF_MONTH, -1);
+		preWeek.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		String preWeekFirstDay = weeklyDateTimeFormat.format(preWeek.getTime());
+		preWeek.add(Calendar.DAY_OF_YEAR, preWeek.getActualMaximum(Calendar.DAY_OF_WEEK)-1);
+		String preWeekLastDay = weeklyDateTimeFormat.format(preWeek.getTime());
+		resultMap.put("dateTime",  preWeekFirstDay + "-" + preWeekLastDay);
+	}
+	private void monthlyDateTime(){
+		Calendar preMonth =  Calendar.getInstance();
+		preMonth.setTime(new Date());
+		preMonth.add(Calendar.MONTH, -1);
+		preMonth.set(Calendar.DAY_OF_MONTH, 1);
+		String preMonthFirstDay = monthlyDateTimeFormat.format(preMonth.getTime());
+		preMonth.add(Calendar.DAY_OF_MONTH, preMonth.getActualMaximum(Calendar.DAY_OF_MONTH)-1);
+		String preMonthLastDay = monthlyDateTimeFormat.format(preMonth.getTime());
+		resultMap.put("dateTime",  preMonthFirstDay + "-" + preMonthLastDay);
 	}
 }
