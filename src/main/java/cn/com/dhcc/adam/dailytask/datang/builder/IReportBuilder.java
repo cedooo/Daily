@@ -1,4 +1,4 @@
-package cn.com.dhcc.adam.dailytask.datang;
+package cn.com.dhcc.adam.dailytask.datang.builder;
 
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 

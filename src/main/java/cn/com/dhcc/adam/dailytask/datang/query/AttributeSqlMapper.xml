@@ -1,0 +1,40 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="query">
+
+	<select id="infoSysNum" resultType="String" parameterType="int">
+		select *
+		from alarmmgrrm
+		<where>
+			time between
+			<if test="_parameter==1">
+				LAST_DAY
+			</if>
+			<if test="_parameter==2">
+				LAST_WEEK
+			</if>
+			<if test="_parameter==3">
+				LAST_MONTH
+			</if>
+			AND #{type}
+		</where>
+	</select>
+	<select id="infoSysNumChange" resultType="String" parameterType="int">
+		select *
+		from alarmmgrrm
+		<where>
+			time between
+			<if test="_parameter==1">
+				LAST_DAY
+			</if>
+			<if test="_parameter==2">
+				LAST_WEEK
+			</if>
+			<if test="_parameter==3">
+				LAST_MONTH
+			</if>
+		</where>
+	</select>
+</mapper>

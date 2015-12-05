@@ -1,4 +1,4 @@
-package cn.com.dhcc.adam.dailytask.datang;
+package cn.com.dhcc.adam.dailytask.datang.tools;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

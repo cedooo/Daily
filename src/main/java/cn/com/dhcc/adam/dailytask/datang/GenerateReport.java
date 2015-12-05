@@ -2,8 +2,11 @@ package cn.com.dhcc.adam.dailytask.datang;
 
 import java.io.File;
 
+import cn.com.dhcc.adam.dailytask.datang.builder.DailyReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.builder.IReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.builder.MonthlyReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.builder.WeeklyReportBuilder;
 import static net.sf.dynamicreports.report.builder.DynamicReports.export;
-
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.jasper.builder.export.JasperDocxExporterBuilder;
 import net.sf.dynamicreports.jasper.builder.export.JasperPdfExporterBuilder;
@@ -47,7 +50,9 @@ public class GenerateReport {
 		}
 		if (reportBuilder != null) {
 			JasperReportBuilder report = reportBuilder.build();
-			export(report, path, fileName, dmsn);
+			if (report != null) {
+				export(report, path, fileName, dmsn);
+			}
 			return report;
 		} else {
 			return null;

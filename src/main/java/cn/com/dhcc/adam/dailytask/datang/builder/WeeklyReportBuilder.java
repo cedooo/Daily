@@ -1,20 +1,9 @@
-package cn.com.dhcc.adam.dailytask.datang;
+package cn.com.dhcc.adam.dailytask.datang.builder;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
-import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
-
-import java.awt.Color;
 import java.util.LinkedHashMap;
 
+import net.sf.dynamicreports.report.exception.DRException;
 import cn.com.dhcc.adam.dailytask.datang.query.ReportQuery;
-
-import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-import net.sf.dynamicreports.report.builder.DynamicReports;
-import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
-import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
-import net.sf.dynamicreports.report.builder.style.StyleBuilder;
-import net.sf.dynamicreports.report.constant.HorizontalAlignment;
-import net.sf.dynamicreports.report.constant.VerticalAlignment;
 
 /**
  * 中国大唐集团公司信息系统运行周总结报告
@@ -22,28 +11,8 @@ import net.sf.dynamicreports.report.constant.VerticalAlignment;
  * @author cedo
  * 
  */
-public class WeeklyReportBuilder implements IReportBuilder {
-	private ReportQuery reportQuery;
-	private String title;
-	private String dateTime;
-	private String overView;
-	private LinkedHashMap<String, String> contents;
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setDateTime(String dateTime) {
-		this.dateTime = dateTime;
-	}
-
-	public void setOverView(String overView) {
-		this.overView = overView;
-	}
-
-	public void setContents(LinkedHashMap<String, String> contents) {
-		this.contents = contents;
-	}
+public class WeeklyReportBuilder extends AbstractReportBuilder{
+	
 
 	public WeeklyReportBuilder() {
 		reportQuery = new ReportQuery(WeeklyReportBuilder.class);
@@ -84,119 +53,13 @@ public class WeeklyReportBuilder implements IReportBuilder {
 				+ "3.本期共发生报警_21119__条;其中严重报警_20265_条一般报警_25_条；次要报警_730_条；主要报警_91_条。\n";
 
 		contents.put(contentsTitleFour, contentsFour);
-		build();
-	}
-
-	@Override
-	public JasperReportBuilder build() {
-		JasperReportBuilder report = DynamicReports.report();
-		report.title(title(title)).title(overview(dateTime, overView))
-				.title(subReport(contents)).pageHeader(pageHeader())
-				// .pageFooter(pageFooter())
-				//.show()
-				;
-		return report;
-	}
-
-	/**
-	 * 自报表
-	 * 
-	 * @param contents
-	 * @return
-	 */
-	private ComponentBuilder<?, ?>[] subReport(
-			LinkedHashMap<String, String> contents) {
-		ComponentBuilder<?, ?>[] reports = new ComponentBuilder<?, ?>[contents
-				.size()];
-		StyleBuilder paTitleStyle = stl
-				.style()
-				.setAlignment(HorizontalAlignment.LEFT,
-						VerticalAlignment.MIDDLE).setFontSize(14).bold();
-
-		StyleBuilder detailsStyle = stl.style().setFontSize(16)
-				.setPadding(2 * 14).setFirstLineIndent(2 * 14);
-		int counter = 0;
-		for (String key : contents.keySet()) {
-			JasperReportBuilder report = DynamicReports.report();
-			report.title(cmp.text(key).setStyle(paTitleStyle)).columnHeader(
-					cmp.text(contents.get(key)).setStyle(detailsStyle));
-			reports[counter++] = cmp.subreport(report);
-
-		}
-		return reports;
-	}
-
-	/**
-	 * 报告标题
-	 * 
-	 * @param title
-	 *            标题
-	 * @return
-	 */
-	public TextFieldBuilder<String> title(String title) {
-		StyleBuilder titleStyle = stl
-				.style()
-				.setAlignment(HorizontalAlignment.CENTER,
-						VerticalAlignment.MIDDLE).setFontSize(22).bold()
-				.setPadding(16);
-		return cmp.text(title).setStyle(titleStyle);
-	}
-
-	/**
-	 * 概要
-	 * 
-	 * @param datatime
-	 *            内容时间
-	 * @param details
-	 *            内容详细
-	 * @return TextFieldBuilder 2维数组
-	 */
-	public TextFieldBuilder<String>[] overview(String datatime, String details) {
-		@SuppressWarnings("unchecked")
-		TextFieldBuilder<String>[] tfba = new TextFieldBuilder[2];
-		StyleBuilder datatimeStyle = stl
-				.style()
-				.setAlignment(HorizontalAlignment.CENTER,
-						VerticalAlignment.MIDDLE).setFontSize(16)
-				.setPadding(16);
-		tfba[0] = cmp.text(datatime).setStyle(datatimeStyle);
-
-		StyleBuilder detailsStyle = stl.style().setFontSize(16)
-				.setFirstLineIndent(2 * 16);
-		tfba[1] = cmp.text(details).setStyle(detailsStyle);
-
-		return tfba;
-	}
-
-	/**
-	 * 页头
-	 * 
-	 * @return
-	 */
-	public ComponentBuilder<?, ?> pageHeader() {
-		StyleBuilder headerStyle = stl
-				.style()
-				.setAlignment(HorizontalAlignment.CENTER,
-						VerticalAlignment.MIDDLE).setFontSize(10)
-				.setPadding(10).setForegroundColor(Color.LIGHT_GRAY);
-		return cmp.text("©东华软件").setStyle(headerStyle);
-	}
-
-	/**
-	 * 页尾
-	 * 
-	 * @return
-	 */
-	public ComponentBuilder<?, ?> pageFooter() {
-		StyleBuilder footerStyle = stl
-				.style()
-				.setAlignment(HorizontalAlignment.CENTER,
-						VerticalAlignment.MIDDLE).setFontSize(10)
-				.setForegroundColor(Color.LIGHT_GRAY);
-		return cmp.text("©东华软件").setStyle(footerStyle);
 	}
 
 	public static void main(String[] args) {
-		new WeeklyReportBuilder();
+		try {
+			new WeeklyReportBuilder().build().show();
+		} catch (DRException e) {
+			e.printStackTrace();
+		}
 	}
 }
