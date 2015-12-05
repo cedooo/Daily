@@ -1,26 +1,29 @@
 package cn.com.dhcc.adam.dailytask.datang.tools;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 
-import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-
-public class DocxReport {
-	public JasperReportBuilder reportTemplate(String file){
+public class DocxReportTemplate {
+	public List<String> reportTemplate(String filePath){
+		List<String> listStr = new ArrayList<String>();
 		FileInputStream fileIS = null;
 		try {
-			fileIS = new FileInputStream("D:/ttt.docx");
-			XWPFDocument  word = new XWPFDocument(fileIS) ;
+			File file = new File(filePath);
+			fileIS = new FileInputStream(file);
+			XWPFDocument  word = new XWPFDocument(fileIS);
 			List<IBodyElement> list = word.getBodyElements();
 			for (IBodyElement iBodyElement : list) {
 				if(iBodyElement instanceof XWPFParagraph){
-					System.out.println(((XWPFParagraph) iBodyElement).getParagraphText());
+					String paragraph = ((XWPFParagraph) iBodyElement).getParagraphText();
+					listStr.add(paragraph);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -36,6 +39,11 @@ public class DocxReport {
 				}
 			}
 		}
-		return null;
+		return listStr;
+	}
+	public static void main(String[] args) {
+		String filePath = "E:/template.docx";
+		System.out
+				.println(new DocxReportTemplate().reportTemplate(filePath));
 	}
 }

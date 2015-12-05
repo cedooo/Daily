@@ -61,7 +61,7 @@ public class GenerateReport {
 
 	private int export(JasperReportBuilder report, String path, String fileName,
 			String dmsn) {
-		String pdfName = path + File.separator + fileName + ".pdf";// reportWeb.getReportName
+		String pdfName = path + File.separator + fileName + ".pdf";
 		String excelName = path + File.separator + fileName + ".xlsx";
 		String wordDocxName = path + File.separator + fileName + ".docx";
 
