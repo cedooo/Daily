@@ -28,8 +28,8 @@ public class DailyReportBuilder extends AbstractReportBuilder {
 		String contentsTitle = null;
 		List<String> strBuilder = new ArrayList<String>();
 		for (String string : listContent) {
-			System.out.println(string);
 			if(string.matches("^[一二三四五六七八九十]、.*$")){
+				System.out.println(string);
 				if(contentsTitle!=null&& strBuilder!=null){
 					List<String> listReportPart = new ArrayList<String>();
 					for (String paragraph : strBuilder) {

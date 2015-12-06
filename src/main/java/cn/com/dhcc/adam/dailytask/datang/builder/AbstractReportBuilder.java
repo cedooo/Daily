@@ -162,9 +162,9 @@ public class AbstractReportBuilder implements IReportBuilder {
 			
 			StringBuilder stb = new StringBuilder();
 			for (String string : listString) {
-				stb.append(string);
+				stb.append(string+"\n");
 			}
-			report.columnHeader(cmp.text(stb.toString()).setStyle(detailsStyle));
+			report.title(cmp.text(stb.toString()).setStyle(detailsStyle));
 			reports[counter++] = cmp.subreport(report);
 
 		}
