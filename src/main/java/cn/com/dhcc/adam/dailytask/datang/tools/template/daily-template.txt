@@ -1,0 +1,31 @@
+﻿中国大唐集团公司信息系统运行日总结报告
+
+{dateTime}00: 00-24: 00
+
+本期，集团公司信息系统总体运行状况{runCondition}，系统安全状况{security}，{majorExceptions}重大异常事件。
+
+一、信息系统基本情况
+集团公司系统运行信息系统{runSys}个，与昨日相比{runSysCounterChange}。
+其中，集团公司总部{headerSys}个系统；分子公司本部个{subCompanySys}系统；基层企业{baseCompanySys}个系统。
+按系统类别划分，重要资源管控类{importResource}个，共享交换平台类{shareSys}个，基础设施{infrastructureSys}个，主营业务管控类{controllerSys}个，公用应用类{publicSys}个，其它类{otherSys}个。
+二、信息系统运行情况监测
+（一）信息系统报警
+信息系统报警总量{infoSysAlarmTotal}条，一般报警{infoSysAlarmCommon}条，次要告警{infoSysAlarmMinor}，主要报警{sinfoSysAlarmMain}条，严重报警{infoSysAlarmSerious}条。
+集团公司总部系统报警{alarmHeader}条,其中网络不通报警{alarmNetworkUnreach}条，URL报警{alarmURL}条，其他报警{alarmHeaderOther}条。截止到目前总部系统报警处理共{alarmProcessed}条。
+（二）系统不可访问
+信息系统不可访问共{infoSysInaccess} 个，系统网络不通{sysNetworkUnreach}个，系统URL {sysURLUnreach}个，其他原因{otherUnreach} 个。
+（三）系统访问量
+重点监测访问量的信息系统共{majorAccess}个，系统访问量最高的为{accessMostSys}，访问量 {accessMost}次。系统访问量最低的为{accessLeastSys}，系统访问量{accessLeast}次。
+三、广域网链路与设备运行监测
+（一）广域网链路情况 
+集团公司骨干广域网链路共{jtMainNetworkLink}条， 目前运行{jtMainNetworkRun}，{jtMainNetworkStop}链路中断事件。其中流量最大的链路为{jtBiggestLink}，其设计带宽为{jtBiggestLinkBandwith}M，平均流量{jtBiggestLinkAverageFlow}M，峰值流量为{jtBiggestLinkTopFlow} M。 
+（二）网络设备运行情况
+1.集团公司骨干广域网路由器共{jtCompanySwitch}台；设备运行率{deviceRunRate}%。目前重点监测路由器{mainSwitch}台，CPU平均使用率最大的路由器为{switchCPUMax}；使用率{switchCPUMaxRate}值。与上级交互平均流量最大的路由器为{switchAverageMaxUp}；流量{switchAverageMaxUpValue}M.
+2.集团公司总部主核心交换机运行基本正常， CPU使用率为{jtCoreSwitchCPURate}%，（通常应在10%以下），到骨干广域网流量平均值为{backboneFlowAverage}  ，最大值为{backboneFlowMaxValue}M 。
+集团公司总部备用核心交换机{jtCoreSwitch}%;到骨干广域网流量最大{jtCoreSwitchFlowMax}M；平均流量{jtCoreSwitchFlowAverage}M 。
+3.目前监测网络设备{networkDevice}台，共发生报警{networkDeviceAlarm}条;其中严重报警{networkDeviceSeriousAlarm}条,一般报警{networkDeviceCommonAlarm}条；次要报警{networkDeviceMinorAlarm}条；主要报警{networkDeviceMainAlarm}条；。
+四、服务器运行监测
+1.集团公司系统服务器共计{server}台，目前重点监测服务器{vipServer}台，设备运行率{serverRunRate}%，发生故障{serverWrong}次，主要原报警{serverMainAlarm}，已处理{serverMainAlarmProcessed} 个，正在处理{serverMainAlarmProcessing}个。
+2.重点监测的服务器中，CPU使用率最高的{vipSeverCPUMaxSys}，使用率{vipSeverCPUMaxValue}% ；内存平均使用率_{vipSeverCPUMaxSysRAM}%_；磁盘平均使用率_{vipSeverDiskUsing}%_；
+3.本期共发生报警{serverAlarmTotal}条;其中严重报警{serverSeriousAlarm}条一般报警{serverCommonAlarm}条；次要报警{serverMinorAlarm}条；主要报警{serverMainAlarm}条。
+

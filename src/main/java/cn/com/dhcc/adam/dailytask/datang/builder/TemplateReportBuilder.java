@@ -7,19 +7,11 @@ import net.sf.dynamicreports.report.exception.DRException;
 import cn.com.dhcc.adam.dailytask.datang.query.ReportQuery;
 import cn.com.dhcc.adam.dailytask.datang.tools.TxtReportTemplate;
 
-/**
- * 中国大唐集团公司信息系统运行月总结报告
- * 
- * @author cedo
- * 
- */
-public class MonthlyReportBuilder extends AbstractReportBuilder{
-	private final static String TXT_TEMPLATE = "src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template.txt";
-	
-	public MonthlyReportBuilder() {
-		reportQuery = new ReportQuery(MonthlyReportBuilder.class);
+public class TemplateReportBuilder extends AbstractReportBuilder {
+	public TemplateReportBuilder(String templatePath, int type){
+		reportQuery = new ReportQuery(type);
 
-		List<String> template = new TxtReportTemplate().getReportString(TXT_TEMPLATE);
+		List<String> template = new TxtReportTemplate().getReportString(templatePath);
 		title = reportPart(template.get(0));
 		dateTime = reportPart(template.get(1));
 		overView = reportPart(template.get(2));
@@ -28,6 +20,7 @@ public class MonthlyReportBuilder extends AbstractReportBuilder{
 		List<String> strBuilder = new ArrayList<String>();
 		for (String string : listContent) {
 			if(string.matches("^[一二三四五六七八九十]、.*$")){
+//System.out.println(string);
 				if(contentsTitle!=null&& strBuilder!=null){
 					List<String> listReportPart = new ArrayList<String>();
 					for (String paragraph : strBuilder) {
@@ -41,12 +34,23 @@ public class MonthlyReportBuilder extends AbstractReportBuilder{
 			}else{
 				strBuilder.add(string);
 			}
+			
 		}
-	}
 
+		if(contentsTitle!=null&& strBuilder!=null){
+			List<String> listReportPart = new ArrayList<String>();
+			for (String paragraph : strBuilder) {
+				String contentStr = reportPart(paragraph);
+				listReportPart.add(contentStr);
+			}
+			contents.put(contentsTitle, listReportPart);
+		}
+		
+	}
+	
 	public static void main(String[] args) {
 		try {
-			new MonthlyReportBuilder().build().show();
+			new TemplateReportBuilder( "src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template.txt",1).build().show();
 		} catch (DRException e) {
 			e.printStackTrace();
 		}

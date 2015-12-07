@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 
 
 public class DevTestDBManager {
@@ -33,8 +32,6 @@ public class DevTestDBManager {
 		System.out
 				.println(DevTestDBManager
 						.executeSQL("select count(*) as value from v_azy_temp_hum", "value"));
-		
-		System.out.println(Arrays.toString("query.sysNuj".split("\\.")));
 	}
 	
 }

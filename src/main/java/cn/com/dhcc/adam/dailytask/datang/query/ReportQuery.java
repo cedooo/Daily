@@ -18,14 +18,10 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.Configuration;
 
 import cn.com.dhcc.adam.dailytask.datang.GenerateReport;
-import cn.com.dhcc.adam.dailytask.datang.builder.DailyReportBuilder;
-import cn.com.dhcc.adam.dailytask.datang.builder.IReportBuilder;
-import cn.com.dhcc.adam.dailytask.datang.builder.MonthlyReportBuilder;
-import cn.com.dhcc.adam.dailytask.datang.builder.WeeklyReportBuilder;
 import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
 
 public class ReportQuery {
-	private Map<String, Object> resultMap = null;
+	private Map<String, Object> resultMap =  new HashMap<String, Object>();
 	private SimpleDateFormat dailyDateTimeFormat = new SimpleDateFormat(
 			"MM月dd日");
 	private SimpleDateFormat weeklyDateTimeFormat = new SimpleDateFormat(
@@ -34,20 +30,25 @@ public class ReportQuery {
 			"MM月dd日");
 	private MapperBuilder mapperBuilder;
 
-	public ReportQuery(Class<? extends IReportBuilder> irt) {
-		resultMap = new HashMap<String, Object>();
-		if (irt == DailyReportBuilder.class) {
+
+	public ReportQuery(int type){
+		switch (type) {
+		case GenerateReport.TYPE_DAILY:
 			dailyDateTime();
 			doQuery(GenerateReport.TYPE_DAILY);
-		} else if (irt == WeeklyReportBuilder.class) {
+			break;
+		case GenerateReport.TYPE_WEEKLY:
 			weeklyDateTime();
 			doQuery(GenerateReport.TYPE_WEEKLY);
-		} else if (irt == MonthlyReportBuilder.class) {
+			break;
+		case GenerateReport.TYPE_MONTHLY:
 			monthlyDateTime();
 			doQuery(GenerateReport.TYPE_MONTHLY);
+			break;
+		case GenerateReport.TYPE_YEARLY:
+		default:
 		}
 	}
-
 	/**
 	 * 查询结果
 	 * 
@@ -59,6 +60,8 @@ public class ReportQuery {
 		return resultMap.get(attribute)!=null?resultMap.get(attribute).toString():"____";
 	}
 
+
+	private final boolean production = false;
 	/**
 	 * 查询所有属性
 	 * 
@@ -70,42 +73,39 @@ public class ReportQuery {
 		Configuration config = mapperBuilder.getConfig();
 		Collection<MappedStatement> mappedStatements = config
 				.getMappedStatements();
-		Integer parameter = type;
 		Map<String, Object> queryResultMap = new HashMap<String, Object>();
 		
-		for (MappedStatement mappedStatement : mappedStatements) {
-			SqlSource sqlSource = mappedStatement.getSqlSource();
-			
-			BoundSql bsql = sqlSource.getBoundSql(parameter);    // BoundSql bsql暂时只支持传入报表类型作为参数
-
-				String attrID = mappedStatement.getId().split("\\.")[1];
-				String value = DevTestDBManager
-						.executeSQL(bsql.getSql(), attrID);
-//System.out.println(attrID + ":" + value);
-				queryResultMap.put(attrID, value);
-		}
-		/*JdbcAbstractTemplate jat = null;
-		jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
-
-		for (MappedStatement mappedStatement : mappedStatements) {
-			SqlSource sqlSource = mappedStatement.getSqlSource();
-			
-			BoundSql bsql = sqlSource.getBoundSql(parameter);    // BoundSql bsql暂时只支持传入报表类型作为参数
-
-			// TODO 从数据库查询对应指标
-			try {
-				String attrID = mappedStatement.getId().split("\\.")[1];
-				String value = jat.getString(attrID, bsql.getSql());
-				queryResultMap.put(attrID, value);
-			} catch (DBException e) {
-				e.printStackTrace();
-			} catch (ConnException e) {
-				e.printStackTrace();
+		if(production){
+			JdbcAbstractTemplate jat = null;
+			jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
+	
+			for (MappedStatement mappedStatement : mappedStatements) {
+				SqlSource sqlSource = mappedStatement.getSqlSource();
+				BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
+				// 从数据库查询对应指标
+				try {
+					String attrID = mappedStatement.getId().split("\\.")[1];
+					String value = jat.getString(attrID, bsql.getSql());
+					queryResultMap.put(attrID, value);
+				} catch (DBException e) {
+					e.printStackTrace();
+				} catch (ConnException e) {
+					e.printStackTrace();
+				}
 			}
+		}else{
+			for (MappedStatement mappedStatement : mappedStatements) {
+				SqlSource sqlSource = mappedStatement.getSqlSource();
+				
+				BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
 
-			System.out.println(mappedStatement.getId() + "\n" + bsql.getSql());
-
-		}*/
+					String attrID = mappedStatement.getId().split("\\.")[1];
+					String value = DevTestDBManager
+							.executeSQL(bsql.getSql(), attrID);
+//System.out.println(attrID + ":" + value);
+					queryResultMap.put(attrID, value);
+			}
+		}
 		resultMap.putAll(queryResultMap);
 	}
 

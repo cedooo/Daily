@@ -16,6 +16,7 @@ import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.PdfEncoding;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
 
 /**
@@ -31,8 +32,12 @@ public class AbstractReportBuilder implements IReportBuilder {
 	protected String overView;
 	protected LinkedHashMap<String, List<String>> contents;
 
+	private StyleBuilder plainStyle;
+
+	@SuppressWarnings("deprecation")
 	public AbstractReportBuilder() {
 		contents = new LinkedHashMap<String,List<String>>();
+		plainStyle = stl.style().setPdfFontName("STSong-Light").setPdfEncoding(PdfEncoding.UniGB_UCS2_H_Chinese_Simplified) ;//.setFontName("Arial");
 	}
 
 	@Override
@@ -53,10 +58,10 @@ public class AbstractReportBuilder implements IReportBuilder {
 	 */
 	protected TextFieldBuilder<String> title(String title) {
 		StyleBuilder titleStyle = stl
-				.style()
+				.style(plainStyle)
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(22).bold()
-				.setPadding(16);
+				.setPadding(16).setFontName("Arial");
 		return cmp.text(title).setStyle(titleStyle);
 	}
 
@@ -74,13 +79,14 @@ public class AbstractReportBuilder implements IReportBuilder {
 		@SuppressWarnings("unchecked")
 		TextFieldBuilder<String>[] tfba = new TextFieldBuilder[2];
 		StyleBuilder datatimeStyle = stl
-				.style()
+				.style(plainStyle)
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(16)
 				.setPadding(16);
 		tfba[0] = cmp.text(datatime).setStyle(datatimeStyle);
 
-		StyleBuilder detailsStyle = stl.style().setFontSize(16)
+		StyleBuilder detailsStyle = stl
+				.style(plainStyle).setFontSize(16)
 				.setFirstLineIndent(2 * 16);
 		tfba[1] = cmp.text(details).setStyle(detailsStyle);
 
@@ -94,7 +100,7 @@ public class AbstractReportBuilder implements IReportBuilder {
 	 */
 	protected ComponentBuilder<?, ?> pageHeader() {
 		StyleBuilder headerStyle = stl
-				.style()
+				.style(plainStyle)
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(10)
 				.setPadding(10).setForegroundColor(Color.LIGHT_GRAY);
@@ -108,14 +114,14 @@ public class AbstractReportBuilder implements IReportBuilder {
 	 */
 	protected ComponentBuilder<?, ?> pageFooter() {
 		StyleBuilder footerStyle = stl
-				.style()
+				.style(plainStyle)
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(10)
 				.setForegroundColor(Color.LIGHT_GRAY);
 		return cmp.text("©东华软件").setStyle(footerStyle);
 	}
 
-	public final static String REGEX_VARIABLE = "^(.*?\\{([a-zA-Z_]+)\\})+?.+$";
+	public final static String REGEX_VARIABLE = "^(.*?\\{([a-zA-Z_0-9]+)\\})+?.*$";
 	/**
 	 * 将表达式替换为查询得到的值
 	 * @param line 字符串
@@ -126,7 +132,7 @@ public class AbstractReportBuilder implements IReportBuilder {
 		Matcher matcher = pattern.matcher(line);
 		while (matcher.matches()) {
 			String matchedAttribute = matcher.group(2);
-			line = line.replaceAll("\\{" + matchedAttribute + "\\}", reportQuery.query(matchedAttribute) );
+			line = line.replaceAll("\\{" + matchedAttribute + "\\}", " " + reportQuery.query(matchedAttribute) + " " );
 			matcher = pattern.matcher(line);
 		}
 		return line;
@@ -143,13 +149,14 @@ public class AbstractReportBuilder implements IReportBuilder {
 		ComponentBuilder<?, ?>[] reports = new ComponentBuilder<?, ?>[contents
 				.size()];
 		StyleBuilder paTitleStyle = stl
-				.style()
+				.style(plainStyle)
 				.setAlignment(HorizontalAlignment.LEFT,
 						VerticalAlignment.MIDDLE).setFontSize(14).bold();
 
-		StyleBuilder detailsStyle = stl.style().setFontSize(16)
+		StyleBuilder detailsStyle = stl
+				.style(plainStyle).setFontSize(16)
 				.setPadding(2 * 14);//.setFirstLineIndent(2 * 14);
-		//StyleBuilder dataStyle = stl.style().underline().setFontSize(16);
+		//StyleBuilder dataStyle = stl.style(plainStyle).underline().setFontSize(16);
 		int counter = 0;
 		/**
 		 * 子报表内容设置

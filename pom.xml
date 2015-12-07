@@ -37,6 +37,13 @@
 			<version>5.1.31</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.31</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- DHCC jar -->
 		<dependency>
 			<groupId>com.dhcc.itims.share</groupId>
@@ -49,6 +56,22 @@
 			<artifactId>itims-share-typ-model</artifactId>
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>iTextAsianCmaps</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>E:\iTextAsianCmaps.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>iTextAsian</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>E:\iTextAsian.jar</systemPath>
 		</dependency>
 		<!-- 
 		<dependency>

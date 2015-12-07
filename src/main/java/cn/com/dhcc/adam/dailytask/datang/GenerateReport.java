@@ -2,10 +2,8 @@ package cn.com.dhcc.adam.dailytask.datang;
 
 import java.io.File;
 
-import cn.com.dhcc.adam.dailytask.datang.builder.DailyReportBuilder;
 import cn.com.dhcc.adam.dailytask.datang.builder.IReportBuilder;
-import cn.com.dhcc.adam.dailytask.datang.builder.MonthlyReportBuilder;
-import cn.com.dhcc.adam.dailytask.datang.builder.WeeklyReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.builder.TemplateReportBuilder;
 import static net.sf.dynamicreports.report.builder.DynamicReports.export;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.jasper.builder.export.JasperDocxExporterBuilder;
@@ -35,15 +33,16 @@ public class GenerateReport {
 	public JasperReportBuilder build(String path, String fileName, String dmsn,
 			int type) {
 		IReportBuilder reportBuilder = null;
+		
 		switch (type) {
 		case TYPE_DAILY:
-			reportBuilder = new DailyReportBuilder();
+			reportBuilder = new TemplateReportBuilder("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template/daily-template.txt",TYPE_DAILY);
 			break;
 		case TYPE_WEEKLY:
-			reportBuilder = new WeeklyReportBuilder();
+			reportBuilder = new TemplateReportBuilder("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template/weekly-template.txt",TYPE_WEEKLY);
 			break;
 		case TYPE_MONTHLY:
-			reportBuilder = new MonthlyReportBuilder();
+			reportBuilder = new TemplateReportBuilder("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template/monthly-template.txt",TYPE_MONTHLY);
 			break;
 		case TYPE_YEARLY:
 		default:
@@ -58,7 +57,14 @@ public class GenerateReport {
 			return null;
 		}
 	}
-
+	/**
+	 * 将报表导出成报表文件
+	 * @param report JasperReportBuilder对象
+	 * @param path 存储路径
+	 * @param fileName 报表文件名称
+	 * @param dmsn 域
+	 * @return 
+	 */
 	private int export(JasperReportBuilder report, String path, String fileName,
 			String dmsn) {
 		String pdfName = path + File.separator + fileName + ".pdf";
@@ -70,7 +76,7 @@ public class GenerateReport {
 		JasperRtfExporterBuilder rtfExporter = export.rtfExporter(rtfName);
 		JasperPdfExporterBuilder pdfExporter = export.pdfExporter(pdfName)
 				.setCharacterEncoding(
-						PdfEncoding.UniGB_UCS2_H_Chinese_Simplified);
+						PdfEncoding.CP1252_Western_European_ANSI);
 
 		JasperXlsxExporterBuilder xlsExporter = export.xlsxExporter(excelName)
 				.setDetectCellType(true).setIgnorePageMargins(true)
