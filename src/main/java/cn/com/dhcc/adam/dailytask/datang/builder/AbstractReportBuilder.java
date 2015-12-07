@@ -61,7 +61,7 @@ public class AbstractReportBuilder implements IReportBuilder {
 				.style(plainStyle)
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(22).bold()
-				.setPadding(16).setFontName("Arial");
+				.setPadding(16);
 		return cmp.text(title).setStyle(titleStyle);
 	}
 

@@ -1,6 +1,6 @@
 ﻿中国大唐集团公司信息系统运行日总结报告
 
-{dateTime}00: 00-24: 00
+{dateTime}00: 00 - 24: 00
 
 本期，集团公司信息系统总体运行状况{runCondition}，系统安全状况{security}，{majorExceptions}重大异常事件。
 
