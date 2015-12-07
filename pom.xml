@@ -57,13 +57,12 @@
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>com.dhcc.itims.share</groupId>
 			<artifactId>iTextAsianCmaps</artifactId>
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>system</scope>
-			<systemPath>E:\iTextAsianCmaps.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/java/cn/com/dhcc/adam/dailytask/datang/builder/font/iTextAsian.jar</systemPath>
 		</dependency>
 		
 		<dependency>
@@ -71,8 +70,10 @@
 			<artifactId>iTextAsian</artifactId>
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>system</scope>
-			<systemPath>E:\iTextAsian.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/java/cn/com/dhcc/adam/dailytask/datang/builder/font/iTextAsianCmaps.jar</systemPath>
 		</dependency>
+		<!-- 
+		 -->
 		<!-- 
 		<dependency>
 			<groupId>com.dhcc.itims.share</groupId>
