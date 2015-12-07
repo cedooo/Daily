@@ -29,7 +29,7 @@ public class DailyReportBuilder extends AbstractReportBuilder {
 		List<String> strBuilder = new ArrayList<String>();
 		for (String string : listContent) {
 			if(string.matches("^[一二三四五六七八九十]、.*$")){
-				System.out.println(string);
+//System.out.println(string);
 				if(contentsTitle!=null&& strBuilder!=null){
 					List<String> listReportPart = new ArrayList<String>();
 					for (String paragraph : strBuilder) {
@@ -43,6 +43,16 @@ public class DailyReportBuilder extends AbstractReportBuilder {
 			}else{
 				strBuilder.add(string);
 			}
+			
+		}
+
+		if(contentsTitle!=null&& strBuilder!=null){
+			List<String> listReportPart = new ArrayList<String>();
+			for (String paragraph : strBuilder) {
+				String contentStr = reportPart(paragraph);
+				listReportPart.add(contentStr);
+			}
+			contents.put(contentsTitle, listReportPart);
 		}
 		
 	}

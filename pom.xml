@@ -31,6 +31,12 @@
 			<artifactId>mybatis</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.31</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- DHCC jar -->
 		<dependency>
 			<groupId>com.dhcc.itims.share</groupId>
@@ -44,5 +50,69 @@
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-cloud-core</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-apmon</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-calltest</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-coll-core</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-coll-typ</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-tool</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-share-view</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-web-jshare</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.dhcc.itims.share</groupId>
+			<artifactId>itims-json-1.0</artifactId>
+			<version>version-3.6-SNAPSHOT</version>
+			<systemPath>E:\itimslib\itims-json-1.0.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		 -->
 	</dependencies>
 </project>

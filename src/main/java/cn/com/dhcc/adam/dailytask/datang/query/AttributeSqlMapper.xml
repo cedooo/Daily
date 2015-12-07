@@ -4,37 +4,21 @@
 
 <mapper namespace="query">
 
-	<select id="infoSysNum" resultType="String" parameterType="int">
-		select infoSysNum
-		from alarmmgrrm
+	<select id="runSys" resultType="String" parameterType="int">
+		SELECT COUNT(*) as runSys
+		FROM v_azy_temp_hum
 		<where>
-			time between
+			collectTime
 			<if test="_parameter==1">
-				LAST_DAY
+				IS NOT NULL
 			</if>
 			<if test="_parameter==2">
-				LAST_WEEK
+				IS NOT NULL
 			</if>
 			<if test="_parameter==3">
-				LAST_MONTH
-			</if>
-			AND #{type}
-		</where>
-	</select>
-	<select id="infoSysNumChange" resultType="String" parameterType="int">
-		select infoSysNumChange
-		from alarmmgrrm
-		<where>
-			time between
-			<if test="_parameter==1">
-				LAST_DAY
-			</if>
-			<if test="_parameter==2">
-				LAST_WEEK
-			</if>
-			<if test="_parameter==3">
-				LAST_MONTH
+				IS NOT NULL
 			</if>
 		</where>
 	</select>
+
 </mapper>

@@ -22,6 +22,7 @@ import cn.com.dhcc.adam.dailytask.datang.builder.DailyReportBuilder;
 import cn.com.dhcc.adam.dailytask.datang.builder.IReportBuilder;
 import cn.com.dhcc.adam.dailytask.datang.builder.MonthlyReportBuilder;
 import cn.com.dhcc.adam.dailytask.datang.builder.WeeklyReportBuilder;
+import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
 
 public class ReportQuery {
 	private Map<String, Object> resultMap = null;
@@ -72,26 +73,30 @@ public class ReportQuery {
 		Integer parameter = type;
 		Map<String, Object> queryResultMap = new HashMap<String, Object>();
 		
-		//TODO testput
-		queryResultMap.put("runCondition", "状况稳定");
-		queryResultMap.put("security", "正常");
-		queryResultMap.put("majorExceptions", "未发生");
-		queryResultMap.put("runSys", "25");
-		queryResultMap.put("runSysCounterChange", "未发生变化");
-		/**
-		JdbcAbstractTemplate jat = null;
+		for (MappedStatement mappedStatement : mappedStatements) {
+			SqlSource sqlSource = mappedStatement.getSqlSource();
+			
+			BoundSql bsql = sqlSource.getBoundSql(parameter);    // BoundSql bsql暂时只支持传入报表类型作为参数
+
+				String attrID = mappedStatement.getId().split("\\.")[1];
+				String value = DevTestDBManager
+						.executeSQL(bsql.getSql(), attrID);
+//System.out.println(attrID + ":" + value);
+				queryResultMap.put(attrID, value);
+		}
+		/*JdbcAbstractTemplate jat = null;
 		jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
 
 		for (MappedStatement mappedStatement : mappedStatements) {
 			SqlSource sqlSource = mappedStatement.getSqlSource();
-			// BoundSql bsql暂时只支持传入报表类型作为参数
-			BoundSql bsql = sqlSource.getBoundSql(parameter);
+			
+			BoundSql bsql = sqlSource.getBoundSql(parameter);    // BoundSql bsql暂时只支持传入报表类型作为参数
 
 			// TODO 从数据库查询对应指标
 			try {
-				String value = jat.getString(mappedStatement.getId(),
-						bsql.getSql());
-				queryResultMap.put(mappedStatement.getId(), value);
+				String attrID = mappedStatement.getId().split("\\.")[1];
+				String value = jat.getString(attrID, bsql.getSql());
+				queryResultMap.put(attrID, value);
 			} catch (DBException e) {
 				e.printStackTrace();
 			} catch (ConnException e) {
@@ -100,8 +105,7 @@ public class ReportQuery {
 
 			System.out.println(mappedStatement.getId() + "\n" + bsql.getSql());
 
-		}
-		**/
+		}*/
 		resultMap.putAll(queryResultMap);
 	}
 
