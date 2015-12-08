@@ -7,7 +7,11 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 报表txt模版
+ * @author cedo
+ *
+ */
 public class TxtReportTemplate {
 	public List<String> getReportString(String filePath) {
 		List<String> listStr = null;
@@ -30,9 +34,6 @@ public class TxtReportTemplate {
 					if (br != null) {
 						br.close();
 					}
-					if (is != null) {
-						is.close();
-					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -43,9 +44,4 @@ public class TxtReportTemplate {
 		return listStr;
 	}
 
-	public static void main(String[] args) {
-		List<String> strb = new TxtReportTemplate()
-				.getReportString("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template.txt");
-		System.out.println(strb);
-	}
 }

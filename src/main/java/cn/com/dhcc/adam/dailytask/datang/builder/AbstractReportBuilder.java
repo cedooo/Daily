@@ -4,6 +4,8 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,7 +22,7 @@ import net.sf.dynamicreports.report.constant.PdfEncoding;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
 
 /**
- * 中国大唐集团公司信息系统运行日总结报告 模版
+ * 中国大唐集团公司信息系统运行总结报告 抽象 模版
  * 
  * @author cedo
  * 
@@ -44,7 +46,9 @@ public class AbstractReportBuilder implements IReportBuilder {
 	public JasperReportBuilder build() {
 		JasperReportBuilder report = DynamicReports.report();
 		report.title(title(title)).title(overview(dateTime, overView))
-				.title(subReport(contents)).pageHeader(pageHeader());
+				.title(subReport(contents));
+				//.pageFooter(pageFooter())
+				//.pageHeader(pageHeader());
 		return report;
 	}
 
@@ -104,7 +108,8 @@ public class AbstractReportBuilder implements IReportBuilder {
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(10)
 				.setPadding(10).setForegroundColor(Color.LIGHT_GRAY);
-		return cmp.text("©东华软件").setStyle(headerStyle);
+		String generateTime = new SimpleDateFormat("MM-dd HH:mm").format(new Date());
+		return cmp.text(generateTime + " ©东华软件").setStyle(headerStyle);
 	}
 
 	/**
@@ -118,7 +123,8 @@ public class AbstractReportBuilder implements IReportBuilder {
 				.setAlignment(HorizontalAlignment.CENTER,
 						VerticalAlignment.MIDDLE).setFontSize(10)
 				.setForegroundColor(Color.LIGHT_GRAY);
-		return cmp.text("©东华软件").setStyle(footerStyle);
+		String generateTime = new SimpleDateFormat("MM-dd HH:mm").format(new Date());
+		return cmp.text(generateTime + " ©东华软件").setStyle(footerStyle);
 	}
 
 	public final static String REGEX_VARIABLE = "^(.*?\\{([a-zA-Z_0-9]+)\\})+?.*$";

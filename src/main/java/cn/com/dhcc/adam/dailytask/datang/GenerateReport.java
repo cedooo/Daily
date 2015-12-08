@@ -35,13 +35,13 @@ public class GenerateReport {
 		
 		switch (type) {
 		case TYPE_DAILY:
-			reportBuilder = new TemplateReportBuilder("/daily-template.txt",TYPE_DAILY);
+			reportBuilder = new TemplateReportBuilder("/cn/com/dhcc/adam/dailytask/datang/tools/template/daily-template.txt",TYPE_DAILY);
 			break;
 		case TYPE_WEEKLY:
-			reportBuilder = new TemplateReportBuilder("/weekly-template.txt",TYPE_WEEKLY);
+			reportBuilder = new TemplateReportBuilder("/cn/com/dhcc/adam/dailytask/datang/tools/template/weekly-template.txt",TYPE_WEEKLY);
 			break;
 		case TYPE_MONTHLY:
-			reportBuilder = new TemplateReportBuilder("/monthly-template.txt",TYPE_MONTHLY);
+			reportBuilder = new TemplateReportBuilder("/cn/com/dhcc/adam/dailytask/datang/tools/template/monthly-template.txt",TYPE_MONTHLY);
 			break;
 		case TYPE_YEARLY:
 		default:
@@ -50,6 +50,8 @@ public class GenerateReport {
 			JasperReportBuilder report = reportBuilder.build();
 			if (report != null) {
 				export(report, path, fileName, dmsn);
+			}else{
+				throw new RuntimeException("生成报表失败，无法生成报表文件");
 			}
 			return report;
 		} else {
@@ -83,8 +85,22 @@ public class GenerateReport {
 		JasperDocxExporterBuilder wordDocxExporter = export
 				.docxExporter(wordDocxName);
 		try {
-			report.toDocx(wordDocxExporter).toPdf(pdfExporter)
-					.toXlsx(xlsExporter).toRtf(rtfExporter);
+			report.toDocx(wordDocxExporter);
+		} catch (DRException e) {
+			e.printStackTrace();
+		}
+		try {
+			report.toPdf(pdfExporter);
+		} catch (DRException e) {
+			e.printStackTrace();
+		}
+		try {
+			report.toXlsx(xlsExporter);
+		} catch (DRException e) {
+			e.printStackTrace();
+		}
+		try {
+			report.toRtf(rtfExporter);
 		} catch (DRException e) {
 			e.printStackTrace();
 		}

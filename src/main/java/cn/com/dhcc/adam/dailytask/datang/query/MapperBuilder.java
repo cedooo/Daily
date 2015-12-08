@@ -24,12 +24,21 @@ public class MapperBuilder {
 	}
 
 	public MapperBuilder(){
+		InputStream inputStream = null;
 		try {
-			InputStream inputStream = Resources.getResourceAsStream(MAPPER_CONFIG_PATH);
+			inputStream = Resources.getResourceAsStream(MAPPER_CONFIG_PATH);
 			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 			config = sqlSessionFactory.getConfiguration();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				if(inputStream!=null){
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

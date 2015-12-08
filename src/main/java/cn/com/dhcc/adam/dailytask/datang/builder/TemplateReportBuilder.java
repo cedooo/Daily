@@ -6,7 +6,11 @@ import java.util.List;
 import net.sf.dynamicreports.report.exception.DRException;
 import cn.com.dhcc.adam.dailytask.datang.query.ReportQuery;
 import cn.com.dhcc.adam.dailytask.datang.tools.TxtReportTemplate;
-
+/**
+ * 模版报表builder
+ * @author cedo
+ *
+ */
 public class TemplateReportBuilder extends AbstractReportBuilder {
 	public TemplateReportBuilder(String templatePath, int type){
 		reportQuery = new ReportQuery(type);

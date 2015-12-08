@@ -20,7 +20,7 @@
  * along with DynamicReports. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cn.com.dhcc.adam.dailytask.datang.builder.font;
+package cn.com.dhcc.adam.dailytask.datang.builder;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
