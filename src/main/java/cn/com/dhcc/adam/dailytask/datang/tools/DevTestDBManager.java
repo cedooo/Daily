@@ -13,11 +13,11 @@ public class DevTestDBManager {
 	public static String executeSQL(String sql, String attribute){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.0.104:3306/dmsn_998","root","root");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dmsn_998","root","root");
 			Statement sta = conn.createStatement();
 			ResultSet result = sta.executeQuery(sql);
 			while(result.next()){
-				return result.getString(attribute);
+				return result.getString(1);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -31,7 +31,7 @@ public class DevTestDBManager {
 	public static void main(String[] args) {
 		System.out
 				.println(DevTestDBManager
-						.executeSQL("select count(*) as value from v_azy_temp_hum", "value"));
+						.executeSQL("select count(*)  from v_azy_temp_hum", "value"));
 	}
 	
 }

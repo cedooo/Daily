@@ -1,21 +1,22 @@
 package cn.com.dhcc.adam.dailytask.datang.tools;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TxtReportTemplate {
 	public List<String> getReportString(String filePath) {
-		List<String> listStr = new ArrayList<String>();
-		File file = new File(filePath);
+		List<String> listStr = null;
 		try {
-			FileReader fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr);
+			InputStream is = TxtReportTemplate.class.getResourceAsStream(filePath);
+			InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+			BufferedReader br = new BufferedReader(isr);
 			String line;
+			listStr = new ArrayList<String>();
 			try {
 				while ((line = br.readLine()) != null) {
 					if (!"".equals(line)) {
@@ -29,15 +30,15 @@ public class TxtReportTemplate {
 					if (br != null) {
 						br.close();
 					}
-					if (fr != null) {
-						fr.close();
+					if (is != null) {
+						is.close();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
 		}
 		return listStr;
 	}

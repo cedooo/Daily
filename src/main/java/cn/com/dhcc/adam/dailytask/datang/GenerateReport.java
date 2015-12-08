@@ -10,7 +10,6 @@ import net.sf.dynamicreports.jasper.builder.export.JasperDocxExporterBuilder;
 import net.sf.dynamicreports.jasper.builder.export.JasperPdfExporterBuilder;
 import net.sf.dynamicreports.jasper.builder.export.JasperRtfExporterBuilder;
 import net.sf.dynamicreports.jasper.builder.export.JasperXlsxExporterBuilder;
-import net.sf.dynamicreports.report.constant.PdfEncoding;
 import net.sf.dynamicreports.report.exception.DRException;
 
 public class GenerateReport {
@@ -36,13 +35,13 @@ public class GenerateReport {
 		
 		switch (type) {
 		case TYPE_DAILY:
-			reportBuilder = new TemplateReportBuilder("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template/daily-template.txt",TYPE_DAILY);
+			reportBuilder = new TemplateReportBuilder("/daily-template.txt",TYPE_DAILY);
 			break;
 		case TYPE_WEEKLY:
-			reportBuilder = new TemplateReportBuilder("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template/weekly-template.txt",TYPE_WEEKLY);
+			reportBuilder = new TemplateReportBuilder("/weekly-template.txt",TYPE_WEEKLY);
 			break;
 		case TYPE_MONTHLY:
-			reportBuilder = new TemplateReportBuilder("src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template/monthly-template.txt",TYPE_MONTHLY);
+			reportBuilder = new TemplateReportBuilder("/monthly-template.txt",TYPE_MONTHLY);
 			break;
 		case TYPE_YEARLY:
 		default:
@@ -74,9 +73,7 @@ public class GenerateReport {
 		String rtfName = path + File.separator + fileName + ".rtf";
 
 		JasperRtfExporterBuilder rtfExporter = export.rtfExporter(rtfName);
-		JasperPdfExporterBuilder pdfExporter = export.pdfExporter(pdfName)
-				.setCharacterEncoding(
-						PdfEncoding.CP1252_Western_European_ANSI);
+		JasperPdfExporterBuilder pdfExporter = export.pdfExporter(pdfName);
 
 		JasperXlsxExporterBuilder xlsExporter = export.xlsxExporter(excelName)
 				.setDetectCellType(true).setIgnorePageMargins(true)

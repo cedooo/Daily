@@ -12,40 +12,47 @@ public class TemplateReportBuilder extends AbstractReportBuilder {
 		reportQuery = new ReportQuery(type);
 
 		List<String> template = new TxtReportTemplate().getReportString(templatePath);
-		title = reportPart(template.get(0));
-		dateTime = reportPart(template.get(1));
-		overView = reportPart(template.get(2));
-		List<String> listContent = template.subList(3, template.size());
-		String contentsTitle = null;
-		List<String> strBuilder = new ArrayList<String>();
-		for (String string : listContent) {
-			if(string.matches("^[一二三四五六七八九十]、.*$")){
-//System.out.println(string);
-				if(contentsTitle!=null&& strBuilder!=null){
-					List<String> listReportPart = new ArrayList<String>();
-					for (String paragraph : strBuilder) {
-						String contentStr = reportPart(paragraph);
-						listReportPart.add(contentStr);
+		if(template!=null){
+			title = reportPart(template.get(0));
+			dateTime = reportPart(template.get(1));
+			overView = reportPart(template.get(2));
+			List<String> listContent = template.subList(3, template.size());
+			String contentsTitle = null;
+			List<String> strBuilder = new ArrayList<String>();
+			for (String string : listContent) {
+				if(string.matches("^[一二三四五六七八九十]、.*$")){
+	//System.out.println(string);
+					if(contentsTitle!=null&& strBuilder!=null){
+						List<String> listReportPart = new ArrayList<String>();
+						for (String paragraph : strBuilder) {
+							String contentStr = reportPart(paragraph);
+							listReportPart.add(contentStr);
+						}
+						contents.put(contentsTitle, listReportPart);
 					}
-					contents.put(contentsTitle, listReportPart);
+					contentsTitle = string;
+					strBuilder.clear();
+				}else{
+					strBuilder.add(string);
 				}
-				contentsTitle = string;
-				strBuilder.clear();
-			}else{
-				strBuilder.add(string);
+				
 			}
-			
-		}
-
-		if(contentsTitle!=null&& strBuilder!=null){
-			List<String> listReportPart = new ArrayList<String>();
-			for (String paragraph : strBuilder) {
-				String contentStr = reportPart(paragraph);
-				listReportPart.add(contentStr);
+	
+			if(contentsTitle!=null&& strBuilder!=null){
+				List<String> listReportPart = new ArrayList<String>();
+				for (String paragraph : strBuilder) {
+					String contentStr = reportPart(paragraph);
+					listReportPart.add(contentStr);
+				}
+				contents.put(contentsTitle, listReportPart);
 			}
-			contents.put(contentsTitle, listReportPart);
+		}else{
+			try {
+				throw new Exception("");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 	
 	public static void main(String[] args) {

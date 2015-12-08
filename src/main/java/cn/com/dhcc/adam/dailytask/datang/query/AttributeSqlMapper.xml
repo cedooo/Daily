@@ -5,7 +5,7 @@
 <mapper namespace="query">
 
 	<select id="runSys" resultType="String" parameterType="int">
-		SELECT COUNT(*) as runSys
+		SELECT COUNT(*) 
 		FROM v_azy_temp_hum
 		<where>
 			collectTime
