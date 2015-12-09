@@ -5,8 +5,8 @@
 本期，集团公司信息系统总体运行状况{runCondition}，系统安全状况{security}，{majorExceptions}重大异常事件。
 
 一、信息系统基本情况
-集团公司系统运行信息系统{runSys}个，与昨日相比{runSysCounterChange}。
-其中，集团公司总部{headerSys}个系统；分子公司本部个{subCompanySys}系统；基层企业{baseCompanySys}个系统。
+集团公司系统运行信息系统{runSys}个，与上月相比{runSysCounterChange}。
+其中，集团公司总部{headerSys}个系统；分子公司本部{subCompanySys}个系统；基层企业{baseCompanySys}个系统。
 按等级保护级别划分，三级系统{level3Sys}个，二级系统{level2Sys}个，一级系统{level1Sys}个，未分级{levelNoneSys}个。
 按系统类别划分，重要资源管控类{importResource}个，共享交换平台类{shareSys}个，基础设施{infrastructureSys}个，主营业务管控类{controllerSys}个，公用应用类{publicSys}个，其它类{otherSys}个。
 二、信息系统运行情况监测

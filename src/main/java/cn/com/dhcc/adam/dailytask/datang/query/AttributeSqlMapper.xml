@@ -3,22 +3,201 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="query">
-
+	<!-- d_alarm_summary_dt_statistics.xml:61 -->
+	<!-- 集团公司系统运行信息系统 -->
 	<select id="runSys" resultType="String" parameterType="int">
-		SELECT COUNT(*) as runSys
-		FROM v_azy_temp_hum
-		<where>
-			collectTime
-			<if test="_parameter==1">
-				IS NOT NULL
-			</if>
-			<if test="_parameter==2">
-				IS NOT NULL
-			</if>
-			<if test="_parameter==3">
-				IS NOT NULL
-			</if>
-		</where>
+		SELECT
+		COUNT(*) AS runSys FROM tcmo WHERE fmotype LIKE "ap%" AND fpmosn = -1
+	</select>
+	<!-- 与前一时间单位相比 -->
+	<select id="runSysCounterChange" resultType="String" parameterType="int">
+		SELECT CASE WHEN counterChange=0 THEN '持平'
+		WHEN counterChange>0 THEN CONCAT('增加 ',counterChange,' 个')
+		END as runSysCounterChange
+		FROM (
+		SELECT COUNT(*) AS counterChange
+		FROM tcmo
+		WHERE fmotype LIKE
+		"ap%" AND fpmosn = -1
+		<if test="value==1">
+			AND DATEDIFF(fCreateTime,NOW())=-1
+		</if>
+		<if test="value==2">
+			AND YEARWEEK(fCreateTime) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+		</if>
+		<if test="value==3">
+			AND YEAR(fCreateTime) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			AND MONTH(fCreateTime) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+		</if>
+		) a
+	</select>
+	<!-- 集团公司总部 -->
+	<select id="headerSys" resultType="String" parameterType="int">
+		SELECT
+		COUNT(*) AS headerSys FROM tcmo WHERE fstatus =99 AND fmotype LIKE
+		"ap%" AND fpmosn = -1
+	</select>
+	<!-- 分子公司本部 -->
+	<select id="subCompanySys" resultType="String" parameterType="int">
+		SELECT COUNT(*) AS subCompanySys FROM tcmo WHERE fmotype LIKE "ap%"
+		AND fstatus IS NULL AND (LENGTH(fshareid)=6)
+	</select>
+	<!-- 基层企业 -->
+	<select id="baseCompanySys" resultType="String" parameterType="int">
+		SELECT COUNT(*) AS baseCompanySys FROM tcmo WHERE fmotype LIKE "ap%"
+		AND
+		fstatus IS NULL AND (LENGTH(fshareid)=8 OR LENGTH(fshareid)=10)
 	</select>
 
+	
+	<!-- 等级保护级别 -->
+	<select id="level3Sys" resultType="String" parameterType="int">
+		select count(*) from tcmo where fmotype like "ap%" and fhebao=3
+	</select>
+	<select id="level2Sys" resultType="String" parameterType="int">
+		select count(*) from tcmo where fmotype like "ap%" and fhebao=2
+	</select>
+	<select id="level1Sys" resultType="String" parameterType="int">
+		select count(*) from tcmo where fmotype like "ap%" and fhebao=1
+	</select>
+	<select id="levelNoneSys" resultType="String" parameterType="int">
+		select count(*) from tcmo where fmotype like "ap%" and fhebao=0
+	</select>
+
+	<!-- day/d_dt_report_lb.xml:152 -->
+	<!-- 1,'共享交换平台' 2,'基础设施平台' 3,'战略管控' 4,'重要资源管控' 5,'主营业务管控' 6,'公共应用' -->
+	<!-- 重要资源管控类 -->
+	<select id="importResource" resultType="String" parameterType="int">
+		select count(* ) as importResource
+		FROM tcmo
+		where fmotype like "ap%"
+		and Fmgrstatus = 4
+	</select>
+	<!-- 共享交换平台 -->
+	<select id="shareSys" resultType="String" parameterType="int">
+		select count(* ) as shareSys
+		FROM tcmo
+		where fmotype like "ap%"
+		and Fmgrstatus =1
+	</select>
+	<!-- 基础设施平台 -->
+	<select id="infrastructureSys" resultType="String"
+		parameterType="int">
+		select count(* ) as infrastructureSys
+		FROM tcmo
+		where
+		fmotype like "ap%"
+		and Fmgrstatus = 2
+	</select>
+	<!-- 主营业务管控 -->
+	<select id="controllerSys" resultType="String" parameterType="int">
+		select count(* ) as controllerSys
+		FROM tcmo
+		where fmotype like "ap%"
+		and
+		Fmgrstatus = 5
+	</select>
+	<!-- 其它类 :战略管控 -->
+	<select id="otherSys" resultType="String" parameterType="int">
+		select count(* ) as otherSys
+		FROM tcmo
+		where fmotype like "ap%"
+		and Fmgrstatus = 3
+	</select>
+	<!-- 公共应用 -->
+	<select id="publicSys" resultType="String" parameterType="int">
+		select count(* ) as publicSys
+		FROM tcmo
+		where fmotype like "ap%"
+		and Fmgrstatus = 6
+	</select>
+
+
+	<!-- 系统访问量 -->
+	<!-- 重点监测访问量的信息系统-->
+	<select id="majorAccess" resultType="String" parameterType="int">
+		SELECT count(*)
+		FROM cfg_monitor cm	
+	</select>
+	<!-- 访问量最高 系统名称-->
+	<select id="accessMostSys" resultType="String" parameterType="int">
+		SELECT m_name
+		FROM data_monitor_traffic_m tm,cfg_monitor cm
+		WHERE tm.m_id = cm.m_id 
+			<if test="value==1">
+				AND DATEDIFF(tm.col_time,NOW())=-1
+			</if>
+			<if test="value==2">
+				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+			</if>
+			<if test="value==3">
+				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			</if>
+		group by  cm.m_name  
+		ORDER BY sum(in_flows+out_flows) DESC
+		LIMIT 1
+	</select>
+	<!-- 访问量最高访问量 -->
+	<select id="accessMost" resultType="String" parameterType="int">
+		SELECT sum(in_flows+out_flows)
+		FROM data_monitor_traffic_m tm,cfg_monitor cm
+		WHERE tm.m_id = cm.m_id 
+			<if test="value==1">
+				AND DATEDIFF(tm.col_time,NOW())=-1
+			</if>
+			<if test="value==2">
+				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+			</if>
+			<if test="value==3">
+				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			</if>
+		group by  cm.m_name  
+		ORDER BY sum(in_flows+out_flows) DESC
+		LIMIT 1
+	</select>
+	<!-- 访问量最低系统名称 -->
+	<select id="accessLeastSys" resultType="String" parameterType="int">
+		SELECT m_name
+		FROM data_monitor_traffic_m tm,cfg_monitor cm
+		WHERE tm.m_id = cm.m_id 
+			<if test="value==1">
+				AND DATEDIFF(tm.col_time,NOW())=-1
+			</if>
+			<if test="value==2">
+				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+			</if>
+			<if test="value==3">
+				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			</if>
+		group by  cm.m_name  
+		ORDER BY sum(in_flows+out_flows) ASC
+		LIMIT 1
+	</select>
+	<!-- 访问量最低访问量 -->
+	<select id="accessLeast" resultType="String" parameterType="int">
+		SELECT sum(in_flows+out_flows)
+		FROM data_monitor_traffic_m tm,cfg_monitor cm
+		WHERE tm.m_id = cm.m_id 
+			<if test="value==1">
+				AND DATEDIFF(tm.col_time,NOW())=-1
+			</if>
+			<if test="value==2">
+				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+			</if>
+			<if test="value==3">
+				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			</if>
+		group by  cm.m_name  
+		ORDER BY sum(in_flows+out_flows) ASC
+		LIMIT 1
+	</select>
+
+	<!-- 信息系统报警: d_alarm_summary_dt_lb_cd_alarm.xml:65 -->
+	
+	
+	
 </mapper>

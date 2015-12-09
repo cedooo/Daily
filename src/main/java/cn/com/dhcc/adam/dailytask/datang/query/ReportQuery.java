@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.mapping.BoundSql;
@@ -57,7 +58,9 @@ public class ReportQuery {
 	 * @return 结果
 	 */
 	public String query(String attribute) {
-		return resultMap.get(attribute)!=null?resultMap.get(attribute).toString():"____";
+		Object value = resultMap.get(attribute);
+		boolean valueValid = value!=null&&!("".equals(value.toString()));
+		return valueValid?value.toString():"____";
 	}
 
 
@@ -68,6 +71,7 @@ public class ReportQuery {
 	 * @param type
 	 *            报表类型
 	 */
+	@SuppressWarnings("unchecked")
 	private void doQuery(int type) {
 		mapperBuilder = new MapperBuilder();
 		Configuration config = mapperBuilder.getConfig();
@@ -78,15 +82,28 @@ public class ReportQuery {
 		if(production){
 			JdbcAbstractTemplate jat = null;
 			jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
-	
+
+			List<Map<String,String>> data = null;
+			Map<String,String> item = null;
+			
 			for (MappedStatement mappedStatement : mappedStatements) {
 				SqlSource sqlSource = mappedStatement.getSqlSource();
 				BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
 				// 从数据库查询对应指标
 				try {
 					String attrID = mappedStatement.getId().split("\\.")[1];
-					String value = jat.getString(attrID, bsql.getSql());
-					queryResultMap.put(attrID, value);
+					//String value = jat.getString(attrID, bsql.getSql());
+					data = jat.getListForMap(bsql.getSql());
+					if(data!=null && data.size()==1 && item.size()==1){
+						item = data.get(0);
+						for(String key : item.keySet()){
+							String value = item.get(key);
+							queryResultMap.put(attrID, value);
+						}
+						item.clear();
+					}else{
+						throw new RuntimeException("SQL 配置错误：可能语法错误或者 语句返回多个结果");
+					}
 				} catch (DBException e) {
 					e.printStackTrace();
 				} catch (ConnException e) {

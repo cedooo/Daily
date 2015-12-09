@@ -14,7 +14,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class MapperBuilder {
 	/**
-	 * mapper配置路劲
+	 * mapper配置路径
 	 */
 	private static final String MAPPER_CONFIG_PATH = "cn/com/dhcc/adam/dailytask/datang/query/mapper-config.xml";
 	private Configuration config;
