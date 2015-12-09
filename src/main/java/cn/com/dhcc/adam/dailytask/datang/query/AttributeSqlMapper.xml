@@ -121,7 +121,7 @@
 	</select>
 	<!-- 访问量最高 系统名称-->
 	<select id="accessMostSys" resultType="String" parameterType="int">
-		SELECT m_name
+		SELECT CASE WHEN m_name IS NOT NULL THEN m_name ELSE '未知' END
 		FROM data_monitor_traffic_m tm,cfg_monitor cm
 		WHERE tm.m_id = cm.m_id 
 			<if test="value==1">
@@ -140,7 +140,7 @@
 	</select>
 	<!-- 访问量最高访问量 -->
 	<select id="accessMost" resultType="String" parameterType="int">
-		SELECT sum(in_flows+out_flows)
+		SELECT CASE WHEN sum(in_flows+out_flows) IS NOT NULL THEN sum(in_flows+out_flows) ELSE '未知' END
 		FROM data_monitor_traffic_m tm,cfg_monitor cm
 		WHERE tm.m_id = cm.m_id 
 			<if test="value==1">
@@ -159,7 +159,7 @@
 	</select>
 	<!-- 访问量最低系统名称 -->
 	<select id="accessLeastSys" resultType="String" parameterType="int">
-		SELECT m_name
+		SELECT CASE WHEN m_name IS NOT NULL THEN m_name ELSE '未知' END
 		FROM data_monitor_traffic_m tm,cfg_monitor cm
 		WHERE tm.m_id = cm.m_id 
 			<if test="value==1">
@@ -178,7 +178,7 @@
 	</select>
 	<!-- 访问量最低访问量 -->
 	<select id="accessLeast" resultType="String" parameterType="int">
-		SELECT sum(in_flows+out_flows)
+		SELECT CASE WHEN sum(in_flows+out_flows) IS NOT NULL THEN sum(in_flows+out_flows) ELSE '未知' END
 		FROM data_monitor_traffic_m tm,cfg_monitor cm
 		WHERE tm.m_id = cm.m_id 
 			<if test="value==1">
