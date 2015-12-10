@@ -3,6 +3,8 @@ package cn.com.dhcc.adam.dailytask.datang.query;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.BoundSql;
@@ -19,10 +21,6 @@ public class MapperBuilder {
 	private static final String MAPPER_CONFIG_PATH = "cn/com/dhcc/adam/dailytask/datang/query/mapper-config.xml";
 	private Configuration config;
 	
-	public Configuration getConfig() {
-		return config;
-	}
-
 	public MapperBuilder(){
 		InputStream inputStream = null;
 		try {
@@ -42,24 +40,17 @@ public class MapperBuilder {
 		}
 	}
 	
-
-	public static void main(String[] args) {
-		try {
-			new MapperBuilder().testMybatis();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	public void testMybatis() throws IOException{
-		
-		Collection<MappedStatement> col = config.getMappedStatements();
-		System.out.println(col.size());
-		for (MappedStatement mappedStatement : col) {
-			Integer parameter = 1; 
+	public Map<String, BoundSql> getSqls(int type){
+		Collection<MappedStatement> mappedStatements = config
+				.getMappedStatements();
+		Map<String, BoundSql> sqlMap = new HashMap<String,BoundSql>();
+		for (MappedStatement mappedStatement : mappedStatements) {
+			String attrID = mappedStatement.getId().split("\\.")[1];
 			SqlSource sqlSource = mappedStatement.getSqlSource();
-			BoundSql bsql = sqlSource.getBoundSql(parameter);
-			System.out.println(mappedStatement.getId() + "\n" + bsql.getSql());
+			BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
+			sqlMap.put(attrID, bsql);
 		}
-
+		return sqlMap;
 	}
+
 }

@@ -11,7 +11,7 @@
 	</select>
 	<!-- 与前一时间单位相比 -->
 	<select id="runSysCounterChange" resultType="String" parameterType="int">
-		SELECT CASE WHEN counterChange=0 THEN '持平'
+		SELECT CASE WHEN counterChange=0 THEN '持平' 
 		WHEN counterChange>0 THEN CONCAT('增加 ',counterChange,' 个')
 		END as runSysCounterChange
 		FROM (
@@ -52,16 +52,16 @@
 	
 	<!-- 等级保护级别 -->
 	<select id="level3Sys" resultType="String" parameterType="int">
-		select count(*) from tcmo where fmotype like "ap%" and fhebao=3
+		select count(*) as level3Sys from tcmo where fmotype like "ap%" and fhebao=3
 	</select>
 	<select id="level2Sys" resultType="String" parameterType="int">
-		select count(*) from tcmo where fmotype like "ap%" and fhebao=2
+		select count(*) as level2Sys from tcmo where fmotype like "ap%" and fhebao=2
 	</select>
 	<select id="level1Sys" resultType="String" parameterType="int">
-		select count(*) from tcmo where fmotype like "ap%" and fhebao=1
+		select count(*) as level1Sys from tcmo where fmotype like "ap%" and fhebao=1
 	</select>
 	<select id="levelNoneSys" resultType="String" parameterType="int">
-		select count(*) from tcmo where fmotype like "ap%" and fhebao=0
+		select count(*) as levelNoneSys from tcmo where fmotype like "ap%" and fhebao=0
 	</select>
 
 	<!-- day/d_dt_report_lb.xml:152 -->
@@ -116,88 +116,111 @@
 	<!-- 系统访问量 -->
 	<!-- 重点监测访问量的信息系统-->
 	<select id="majorAccess" resultType="String" parameterType="int">
-		SELECT count(*)
+		SELECT count(*) as majorAccess
 		FROM cfg_monitor cm	
 	</select>
-	<!-- 访问量最高 系统名称-->
-	<select id="accessMostSys" resultType="String" parameterType="int">
-		SELECT CASE WHEN m_name IS NOT NULL THEN m_name ELSE '未知' END
-		FROM data_monitor_traffic_m tm,cfg_monitor cm
-		WHERE tm.m_id = cm.m_id 
+	<!-- 访问量最高 系统名称 最高访问量  -->
+	<select id="accessMostSys_accessMost_accessLeastSys_accessLeast" resultType="String" parameterType="int">
+		SELECT mat.accessSys as accessMostSys, mat.access as accessMost,
+			mit.accessSys as accessLeastSys, mit.access as accessLeast
+		FROM
+		(
+		SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
+		FROM cfg_monitor cm  LEFT JOIN  data_monitor_traffic_m tm ON  tm.m_id = cm.m_id 
+		WHERE 
 			<if test="value==1">
-				AND DATEDIFF(tm.col_time,NOW())=-1
+				DATEDIFF(tm.col_time,NOW())=-1
 			</if>
 			<if test="value==2">
-				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+				YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
 			</if>
 			<if test="value==3">
-				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
 				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
 			</if>
 		group by  cm.m_name  
-		ORDER BY sum(in_flows+out_flows) DESC
+		ORDER BY  sum(in_flows+out_flows) DESC
 		LIMIT 1
-	</select>
-	<!-- 访问量最高访问量 -->
-	<select id="accessMost" resultType="String" parameterType="int">
-		SELECT CASE WHEN sum(in_flows+out_flows) IS NOT NULL THEN sum(in_flows+out_flows) ELSE '未知' END
-		FROM data_monitor_traffic_m tm,cfg_monitor cm
-		WHERE tm.m_id = cm.m_id 
+		)mat,
+		(
+		SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
+		FROM cfg_monitor cm  LEFT JOIN  data_monitor_traffic_m tm ON  tm.m_id = cm.m_id 
+		WHERE 
 			<if test="value==1">
-				AND DATEDIFF(tm.col_time,NOW())=-1
+				DATEDIFF(tm.col_time,NOW())=-1
 			</if>
 			<if test="value==2">
-				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+				YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
 			</if>
 			<if test="value==3">
-				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
 				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
 			</if>
 		group by  cm.m_name  
-		ORDER BY sum(in_flows+out_flows) DESC
+		ORDER BY  sum(in_flows+out_flows) ASC
 		LIMIT 1
-	</select>
-	<!-- 访问量最低系统名称 -->
-	<select id="accessLeastSys" resultType="String" parameterType="int">
-		SELECT CASE WHEN m_name IS NOT NULL THEN m_name ELSE '未知' END
-		FROM data_monitor_traffic_m tm,cfg_monitor cm
-		WHERE tm.m_id = cm.m_id 
-			<if test="value==1">
-				AND DATEDIFF(tm.col_time,NOW())=-1
-			</if>
-			<if test="value==2">
-				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
-			</if>
-			<if test="value==3">
-				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-			</if>
-		group by  cm.m_name  
-		ORDER BY sum(in_flows+out_flows) ASC
-		LIMIT 1
-	</select>
-	<!-- 访问量最低访问量 -->
-	<select id="accessLeast" resultType="String" parameterType="int">
-		SELECT CASE WHEN sum(in_flows+out_flows) IS NOT NULL THEN sum(in_flows+out_flows) ELSE '未知' END
-		FROM data_monitor_traffic_m tm,cfg_monitor cm
-		WHERE tm.m_id = cm.m_id 
-			<if test="value==1">
-				AND DATEDIFF(tm.col_time,NOW())=-1
-			</if>
-			<if test="value==2">
-				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
-			</if>
-			<if test="value==3">
-				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-			</if>
-		group by  cm.m_name  
-		ORDER BY sum(in_flows+out_flows) ASC
-		LIMIT 1
+		)mit
 	</select>
 
-	<!-- 信息系统报警: d_alarm_summary_dt_lb_cd_alarm.xml:65 -->
-	
-	
+	<!-- 信息系统报警: d_app_alarm_summary.xml:64 d_app_alarm_branch_summary.xml:64 -->
+	<!-- 信息系统报警  -->
+	<select id="infoSysAlarmTotal_infoSysAlarmCommon_infoSysAlarmMinor_infoSysAlarmMain_infoSysAlarmSerious" resultType="String" parameterType="int">
+		SELECT 
+			datangjituanbenbu.critical + datangfengongsi.critical as infoSysAlarmSerious,
+			datangjituanbenbu.major + datangfengongsi.major as infoSysAlarmMain,
+			datangjituanbenbu.minor +datangfengongsi.minor as infoSysAlarmMinor,
+			datangjituanbenbu.warnning + datangfengongsi.warnning as infoSysAlarmCommon,
+			datangjituanbenbu.sumnum + datangfengongsi.sumnum as infoSysAlarmTotal
+		FROM
+		(
+		SELECT SUM( CASE WHEN fseverity='5'THEN num ELSE 0 END )as critical,
+			SUM(CASE WHEN fseverity='4'THEN num ELSE 0 END )as major,
+			SUM(CASE WHEN fseverity='3'THEN num ELSE 0 END )as minor,
+			SUM(CASE WHEN fseverity='2'THEN num ELSE 0 END )as warnning,
+			SUM(CASE WHEN fseverity='1'THEN num ELSE 0 END )as unkown,
+			SUM(CASE WHEN fseverity IS NOT NULL THEN num ELSE 0 END ) as sumnum
+		
+		FROM (
+		SELECT SUM(tp.num) AS num,tp.fip,tp.fcause,tp.fseverity FROM ( 
+		          
+		  SELECT tf.num,CASE WHEN  tf.fseverity=5 THEN "严重报警" 
+		             WHEN  tf.fseverity=4 THEN "主要报警" 
+		             WHEN  tf.fseverity=3 THEN "次要报警" 
+		             WHEN  tf.fseverity=2 THEN "警告报警" 
+		             WHEN  tf.fseverity=1 THEN "未知报警" END fip,tf.mosn,tf.fcause,tf.fseverity FROM  (  SELECT sum(dd.num ) as num,dd.mosn,dd.fseverity,dd.fcause,dd.fshareid ,dd.fname FROM (    
+		 
+		SELECT COUNT(bb.fshareid) AS num,aa.mosn,aa.fseverity,aa.fcause,bb.fshareid ,bb.fname    
+		  FROM (        
+		    SELECT mosn,fSeverity,fcause,flasttime FROM tfactive )aa ,       
+		     (SELECT tcc.mosn,tcc.fshareid,tcc.fname  FROM  tcmo tcc,tmdatangintegr tmm WHERE tcc.fstatus =99  AND  tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid       
+		       UNION               SELECT tm.mosn,tt.fshareid,tt.fname FROM tmct tm ,              (SELECT tc.ctid,t.mosn,t.fshareid,t.fname,t.ftitle FROM tcapct tc,            
+		     (SELECT tcc.mosn ,tcc.fshareid,tcc.fname,tmm.ftitle FROM  tcmo tcc,tmdatangintegr tmm                     WHERE tcc.fstatus =99    AND tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid                    ) t         
+		        WHERE  t.mosn = tc.mosn               )tt              WHERE tm.fCtID = tt.ctid            UNION     
+		
+		     SELECT  mo.mosn,t.fshareid,t.fname FROM tcmo mo, trrelation rel,(SELECT mosn,fname,fshareid FROM tcmo WHERE fstatus =99 )t        
+		    WHERE (rel.fsrmosn = t.mosn OR rel.ftrmosn = t.mosn  )          AND  mo.fmotype LIKE "12%" AND ((mo.mosn = rel.fsrmosn OR mo.mosn = rel.ftrmosn) AND mo.mosn != t.mosn )         GROUP BY mosn      
+		    )bb WHERE aa.mosn = bb.mosn GROUP BY bb.fshareid,aa.fseverity )dd  group by dd.fseverity)tf)tp GROUP BY tp.fSeverity 
+		)allABT
+		)datangjituanbenbu,
+		(
+		select tttt.critical, tttt.major,tttt.minor,tttt.warnning,tttt.unkown,(tttt.critical+tttt.major+tttt.minor+tttt.warnning+tttt.unkown) as sumnum from (
+		SELECT  Max(CASE WHEN ttt.fip='严重报警' THEN ttt.num  else 0  END) critical,Max(CASE WHEN ttt.fip='主要' THEN ttt.num  else 0 END) major,
+		   Max( CASE WHEN ttt.fip="次要" THEN ttt.num   else 0 END )minor, 
+		  Max(CASE WHEN ttt.fip="警告" THEN ttt.num  else 0 END )warnning,
+		Max(CASE WHEN ttt.fip="未知" THEN ttt.num  else 0 END )unkown 
+		      FROM ( SELECT SUM(tp.num) AS num,tp.fip,tp.fcause,tp.fseverity FROM ( 
+		         
+		  SELECT COUNT(*) AS num,CASE WHEN  tf.fseverity=5 THEN "严重报警" 
+		             WHEN  tf.fseverity=4 THEN "主要" 
+		             WHEN  tf.fseverity=3 THEN "次要" 
+		             WHEN  tf.fseverity=2 THEN "警告" 
+		             WHEN  tf.fseverity=1 THEN "未知" END fip,tf.mosn,tf.fcause,tf.fseverity FROM tfactive tf,
+		( SELECT mosn FROM tcmo WHERE   fMOType LIKE 'ap%' AND tcmo.fstatus IS NULL UNION 
+		(SELECT tm.mosn FROM tmct tm ,(SELECT tc.ctid FROM tcapct tc,tcmo t 
+		 WHERE  t.fMOType LIKE 'ap%' AND t.fstatus IS NULL AND t.mosn = tc.MOSN)tt 
+		WHERE tm.fCtID = tt.ctid))th WHERE 
+		    th.mosn = tf.mosn GROUP BY tf.fSeverity)tp GROUP BY tp.fSeverity )ttt)tttt
+		)datangfengongsi
+	</select>
 	
 </mapper>

@@ -7,16 +7,12 @@ import itims.share.db.JdbcAbstractTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlSource;
-import org.apache.ibatis.session.Configuration;
 
 import cn.com.dhcc.adam.dailytask.datang.GenerateReport;
 import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
@@ -74,10 +70,8 @@ public class ReportQuery {
 	@SuppressWarnings("unchecked")
 	private void doQuery(int type) {
 		mapperBuilder = new MapperBuilder();
-		Configuration config = mapperBuilder.getConfig();
-		Collection<MappedStatement> mappedStatements = config
-				.getMappedStatements();
 		Map<String, Object> queryResultMap = new HashMap<String, Object>();
+		Map<String, BoundSql> msb = mapperBuilder.getSqls(type);
 		
 		if(production){
 			JdbcAbstractTemplate jat = null;
@@ -86,14 +80,14 @@ public class ReportQuery {
 			List<Map<String,String>> data = null;
 			Map<String,String> item = null;
 			
-			for (MappedStatement mappedStatement : mappedStatements) {
-				SqlSource sqlSource = mappedStatement.getSqlSource();
-				BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
+			for (String sqlKey : msb.keySet()) {
 				// 从数据库查询对应指标
+				BoundSql boundSql = msb.get(sqlKey);
 				try {
-					String attrID = mappedStatement.getId().split("\\.")[1];
+					String attrID = sqlKey;
 					//String value = jat.getString(attrID, bsql.getSql());
-					data = jat.getListForMap(bsql.getSql());
+					data = jat.getListForMap(boundSql.getSql());
+System.out.println("executeQuery  " + attrID +  ": " + boundSql.getSql());
 					if(data!=null && data.size()==1 && item.size()==1){
 						item = data.get(0);
 						for(String key : item.keySet()){
@@ -111,16 +105,19 @@ public class ReportQuery {
 				}
 			}
 		}else{
-			for (MappedStatement mappedStatement : mappedStatements) {
-				SqlSource sqlSource = mappedStatement.getSqlSource();
+			for (String sqlKey : msb.keySet()) {
+				BoundSql boundSql = msb.get(sqlKey);    // BoundSql bsql暂时只支持传入报表类型作为参数
+				String attrID = sqlKey;
+				String attrsID[] = attrID.split("_");
 				
-				BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
-
-					String attrID = mappedStatement.getId().split("\\.")[1];
-					String value = DevTestDBManager
-							.executeSQL(bsql.getSql(), attrID);
-//System.out.println(attrID + ":" + value);
-					queryResultMap.put(attrID, value);
+				 List<Map<String, String>> values = DevTestDBManager
+						.executeSQL(boundSql.getSql(), attrsID);
+System.out.println("executeQuery  " + attrID +  ": " + boundSql.getSql());
+				for (Map<String, String> map : values) {
+					for (String mapKey : map.keySet()) {
+						queryResultMap.put(mapKey, map.get(mapKey));
+					}
+				}
 			}
 		}
 		resultMap.putAll(queryResultMap);

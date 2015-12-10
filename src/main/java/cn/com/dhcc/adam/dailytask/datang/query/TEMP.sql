@@ -131,3 +131,48 @@
 		)abtd 
 		ON abtc.fSeverity  = abtd.fSeverity
 	</select>	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 访问量最低系统名称 -->
+	<select id="accessLeastSys" resultType="String" parameterType="int">
+		SELECT CASE WHEN m_name IS NOT NULL THEN m_name ELSE '未知' END
+		FROM data_monitor_traffic_m tm,cfg_monitor cm
+		WHERE tm.m_id = cm.m_id 
+			<if test="value==1">
+				AND DATEDIFF(tm.col_time,NOW())=-1
+			</if>
+			<if test="value==2">
+				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+			</if>
+			<if test="value==3">
+				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			</if>
+		group by  cm.m_name  
+		ORDER BY sum(in_flows+out_flows) ASC
+		LIMIT 1
+	</select>
+	<!-- 访问量最低访问量 -->
+	<select id="accessLeast" resultType="String" parameterType="int">
+		SELECT CASE WHEN sum(in_flows+out_flows) IS NOT NULL THEN sum(in_flows+out_flows) ELSE '未知' END
+		FROM data_monitor_traffic_m tm,cfg_monitor cm
+		WHERE tm.m_id = cm.m_id 
+			<if test="value==1">
+				AND DATEDIFF(tm.col_time,NOW())=-1
+			</if>
+			<if test="value==2">
+				AND YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+			</if>
+			<if test="value==3">
+				AND YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+			</if>
+		group by  cm.m_name  
+		ORDER BY sum(in_flows+out_flows) ASC
+		LIMIT 1
+	</select>

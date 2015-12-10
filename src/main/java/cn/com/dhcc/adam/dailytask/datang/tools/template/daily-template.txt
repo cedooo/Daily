@@ -10,7 +10,7 @@
 按系统类别划分，重要资源管控类{importResource}个，共享交换平台类{shareSys}个，基础设施{infrastructureSys}个，主营业务管控类{controllerSys}个，公用应用类{publicSys}个，其它类{otherSys}个。
 二、信息系统运行情况监测
 （一）信息系统报警
-信息系统报警总量{infoSysAlarmTotal}条，一般报警{infoSysAlarmCommon}条，次要告警{infoSysAlarmMinor}，主要报警{sinfoSysAlarmMain}条，严重报警{infoSysAlarmSerious}条。
+信息系统报警总量{infoSysAlarmTotal}条，一般报警{infoSysAlarmCommon}条，次要告警{infoSysAlarmMinor}，主要报警{infoSysAlarmMain}条，严重报警{infoSysAlarmSerious}条。
 集团公司总部系统报警{alarmHeader}条,其中网络不通报警{alarmNetworkUnreach}条，URL报警{alarmURL}条，其他报警{alarmHeaderOther}条。截止到目前总部系统报警处理共{alarmProcessed}条。
 （二）系统不可访问
 信息系统不可访问共{infoSysInaccess} 个，系统网络不通{sysNetworkUnreach}个，系统URL {sysURLUnreach}个，其他原因{otherUnreach} 个。

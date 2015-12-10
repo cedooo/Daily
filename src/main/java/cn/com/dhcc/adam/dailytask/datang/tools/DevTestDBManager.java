@@ -5,33 +5,50 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class DevTestDBManager {
 
 	
-	public static String executeSQL(String sql, String attribute){
+	public static List<Map<String, String>> executeSQL(String sql, String[] attribute){
+		List<Map<String, String>> listMaps = new ArrayList<Map<String, String>>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dmsn_998","root","root");
 			Statement sta = conn.createStatement();
 			ResultSet result = sta.executeQuery(sql);
 			while(result.next()){
-				return result.getString(1);
+				Map<String, String> maps = new HashMap<String, String>();
+				for (int i = 0; i < attribute.length; i++) {
+					String attr = attribute[i];
+					String value = result.getString(attr);
+					maps.put(attribute[i], value);
+				}
+				listMaps.add(maps);
 			}
+			conn.close();
+			return listMaps;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return "";
+		return null;
 		
 	}
 	
 	public static void main(String[] args) {
+		String attr[] = new String[2];
+		attr[0] = "tot";
+		attr[1] = "dy";
 		System.out
 				.println(DevTestDBManager
-						.executeSQL("select count(*)  from v_azy_temp_hum", "value"));
+						.executeSQL("select count(*) as tot ,now() as dy  from v_azy_temp_hum", attr)
+						);
 	}
 	
 }
