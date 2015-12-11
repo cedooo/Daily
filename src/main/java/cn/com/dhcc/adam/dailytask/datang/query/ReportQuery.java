@@ -78,25 +78,25 @@ public class ReportQuery {
 			jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
 
 			List<Map<String,String>> data = null;
-			Map<String,String> item = null;
 			
 			for (String sqlKey : msb.keySet()) {
 				// 从数据库查询对应指标
 				BoundSql boundSql = msb.get(sqlKey);
 				try {
 					String attrID = sqlKey;
-					//String value = jat.getString(attrID, bsql.getSql());
+					String attrsID[] = attrID.split("_");
+					
 					data = jat.getListForMap(boundSql.getSql());
 System.out.println("executeQuery  " + attrID +  ": " + boundSql.getSql());
-					if(data!=null && data.size()==1 && item.size()==1){
-						item = data.get(0);
-						for(String key : item.keySet()){
-							String value = item.get(key);
-							queryResultMap.put(attrID, value);
+					if(data!=null ){
+						for (Map<String,String> resultMap : data) {
+							for(String key : resultMap.keySet()){
+								String value = resultMap.get(key);
+								queryResultMap.put(attrID, value);
+							}
 						}
-						item.clear();
 					}else{
-						throw new RuntimeException("SQL 配置错误：可能语法错误或者 语句返回多个结果");
+						throw new RuntimeException("SQL错误：可能配置出现语法错误");
 					}
 				} catch (DBException e) {
 					e.printStackTrace();

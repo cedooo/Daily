@@ -6,13 +6,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 public class MapperBuilder {
 	/**
@@ -25,8 +24,9 @@ public class MapperBuilder {
 		InputStream inputStream = null;
 		try {
 			inputStream = Resources.getResourceAsStream(MAPPER_CONFIG_PATH);
-			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-			config = sqlSessionFactory.getConfiguration();
+			//-- Mybatis XMLConfigBuilder : http://mybatis.org/mybatis-3/zh/java-api.html
+			XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, null, null);
+			config = parser.parse();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{
