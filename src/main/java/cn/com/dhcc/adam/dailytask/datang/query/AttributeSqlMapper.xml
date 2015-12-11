@@ -6,8 +6,7 @@
 	<!-- d_alarm_summary_dt_statistics.xml:61 -->
 	<!-- 集团公司系统运行信息系统 -->
 	<select id="runSys" resultType="String" parameterType="int">
-		SELECT
-		COUNT(*) AS runSys FROM tcmo WHERE fmotype LIKE "ap%" AND fpmosn = -1
+		SELECT COUNT(*) AS runSys FROM tcmo WHERE fmotype LIKE "ap%" AND fpmosn = -1
 	</select>
 	<!-- 与前一时间单位相比 -->
 	<select id="runSysCounterChange" resultType="String" parameterType="int">
@@ -125,40 +124,50 @@
 			mit.accessSys as accessLeastSys, mit.access as accessLeast
 		FROM
 		(
-		SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
-		FROM cfg_monitor cm  LEFT JOIN  data_monitor_traffic_m tm ON  tm.m_id = cm.m_id 
-		WHERE 
-			<if test="value==1">
-				DATEDIFF(tm.col_time,NOW())=-1
-			</if>
-			<if test="value==2">
-				YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
-			</if>
-			<if test="value==3">
-				YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-			</if>
-		group by  cm.m_name  
-		ORDER BY  sum(in_flows+out_flows) DESC
-		LIMIT 1
+			SELECT  accessSys,access
+			FROM(
+				SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
+				FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id 
+				WHERE 
+				<if test="value==1">
+					DATEDIFF(tm.col_time,NOW())=-1
+				</if>
+				<if test="value==2">
+					YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+				</if>
+				<if test="value==3">
+					YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+					AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				</if> 
+						
+				group by  cm.m_name  
+				ORDER BY  sum(in_flows+out_flows) DESC
+			)t
+			WHERE t.accessSys IS NOT NULL
+			LIMIT 1 
 		)mat,
 		(
-		SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
-		FROM cfg_monitor cm  LEFT JOIN  data_monitor_traffic_m tm ON  tm.m_id = cm.m_id 
-		WHERE 
-			<if test="value==1">
-				DATEDIFF(tm.col_time,NOW())=-1
-			</if>
-			<if test="value==2">
-				YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
-			</if>
-			<if test="value==3">
-				YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-				AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-			</if>
-		group by  cm.m_name  
-		ORDER BY  sum(in_flows+out_flows) ASC
-		LIMIT 1
+			SELECT  accessSys,access
+			FROM(
+				SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
+				FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id 
+				WHERE 
+				<if test="value==1">
+					DATEDIFF(tm.col_time,NOW())=-1
+				</if>
+				<if test="value==2">
+					YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+				</if>
+				<if test="value==3">
+					YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+					AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				</if> 
+						
+				group by  cm.m_name  
+				ORDER BY  sum(in_flows+out_flows) ASC
+			)t
+			WHERE t.accessSys IS NOT NULL
+			LIMIT 1 
 		)mit
 	</select>
 
@@ -173,34 +182,34 @@
 			datangjituanbenbu.sumnum + datangfengongsi.sumnum as infoSysAlarmTotal
 		FROM
 		(
-		SELECT SUM( CASE WHEN fseverity='5'THEN num ELSE 0 END )as critical,
-			SUM(CASE WHEN fseverity='4'THEN num ELSE 0 END )as major,
-			SUM(CASE WHEN fseverity='3'THEN num ELSE 0 END )as minor,
-			SUM(CASE WHEN fseverity='2'THEN num ELSE 0 END )as warnning,
-			SUM(CASE WHEN fseverity='1'THEN num ELSE 0 END )as unkown,
-			SUM(CASE WHEN fseverity IS NOT NULL THEN num ELSE 0 END ) as sumnum
-		
-		FROM (
-		SELECT SUM(tp.num) AS num,tp.fip,tp.fcause,tp.fseverity FROM ( 
-		          
-		  SELECT tf.num,CASE WHEN  tf.fseverity=5 THEN "严重报警" 
-		             WHEN  tf.fseverity=4 THEN "主要报警" 
-		             WHEN  tf.fseverity=3 THEN "次要报警" 
-		             WHEN  tf.fseverity=2 THEN "警告报警" 
-		             WHEN  tf.fseverity=1 THEN "未知报警" END fip,tf.mosn,tf.fcause,tf.fseverity FROM  (  SELECT sum(dd.num ) as num,dd.mosn,dd.fseverity,dd.fcause,dd.fshareid ,dd.fname FROM (    
-		 
-		SELECT COUNT(bb.fshareid) AS num,aa.mosn,aa.fseverity,aa.fcause,bb.fshareid ,bb.fname    
-		  FROM (        
-		    SELECT mosn,fSeverity,fcause,flasttime FROM tfactive )aa ,       
-		     (SELECT tcc.mosn,tcc.fshareid,tcc.fname  FROM  tcmo tcc,tmdatangintegr tmm WHERE tcc.fstatus =99  AND  tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid       
-		       UNION               SELECT tm.mosn,tt.fshareid,tt.fname FROM tmct tm ,              (SELECT tc.ctid,t.mosn,t.fshareid,t.fname,t.ftitle FROM tcapct tc,            
-		     (SELECT tcc.mosn ,tcc.fshareid,tcc.fname,tmm.ftitle FROM  tcmo tcc,tmdatangintegr tmm                     WHERE tcc.fstatus =99    AND tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid                    ) t         
-		        WHERE  t.mosn = tc.mosn               )tt              WHERE tm.fCtID = tt.ctid            UNION     
-		
-		     SELECT  mo.mosn,t.fshareid,t.fname FROM tcmo mo, trrelation rel,(SELECT mosn,fname,fshareid FROM tcmo WHERE fstatus =99 )t        
-		    WHERE (rel.fsrmosn = t.mosn OR rel.ftrmosn = t.mosn  )          AND  mo.fmotype LIKE "12%" AND ((mo.mosn = rel.fsrmosn OR mo.mosn = rel.ftrmosn) AND mo.mosn != t.mosn )         GROUP BY mosn      
-		    )bb WHERE aa.mosn = bb.mosn GROUP BY bb.fshareid,aa.fseverity )dd  group by dd.fseverity)tf)tp GROUP BY tp.fSeverity 
-		)allABT
+			SELECT SUM( CASE WHEN fseverity='5'THEN num ELSE 0 END )as critical,
+				SUM(CASE WHEN fseverity='4'THEN num ELSE 0 END )as major,
+				SUM(CASE WHEN fseverity='3'THEN num ELSE 0 END )as minor,
+				SUM(CASE WHEN fseverity='2'THEN num ELSE 0 END )as warnning,
+				SUM(CASE WHEN fseverity='1'THEN num ELSE 0 END )as unkown,
+				SUM(CASE WHEN fseverity IS NOT NULL THEN num ELSE 0 END ) as sumnum
+			
+			FROM (
+				SELECT SUM(tp.num) AS num,tp.fip,tp.fcause,tp.fseverity FROM ( 
+				          
+				  SELECT tf.num,CASE WHEN  tf.fseverity=5 THEN "严重报警" 
+				             WHEN  tf.fseverity=4 THEN "主要报警" 
+				             WHEN  tf.fseverity=3 THEN "次要报警" 
+				             WHEN  tf.fseverity=2 THEN "警告报警" 
+				             WHEN  tf.fseverity=1 THEN "未知报警" END fip,tf.mosn,tf.fcause,tf.fseverity FROM  (  SELECT sum(dd.num ) as num,dd.mosn,dd.fseverity,dd.fcause,dd.fshareid ,dd.fname FROM (    
+				 
+				SELECT COUNT(bb.fshareid) AS num,aa.mosn,aa.fseverity,aa.fcause,bb.fshareid ,bb.fname    
+				  FROM (        
+				    SELECT mosn,fSeverity,fcause,flasttime FROM tfactive )aa ,       
+				     (SELECT tcc.mosn,tcc.fshareid,tcc.fname  FROM  tcmo tcc,tmdatangintegr tmm WHERE tcc.fstatus =99  AND  tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid       
+				       UNION               SELECT tm.mosn,tt.fshareid,tt.fname FROM tmct tm ,              (SELECT tc.ctid,t.mosn,t.fshareid,t.fname,t.ftitle FROM tcapct tc,            
+				     (SELECT tcc.mosn ,tcc.fshareid,tcc.fname,tmm.ftitle FROM  tcmo tcc,tmdatangintegr tmm                     WHERE tcc.fstatus =99    AND tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid                    ) t         
+				        WHERE  t.mosn = tc.mosn               )tt              WHERE tm.fCtID = tt.ctid            UNION     
+				
+				     SELECT  mo.mosn,t.fshareid,t.fname FROM tcmo mo, trrelation rel,(SELECT mosn,fname,fshareid FROM tcmo WHERE fstatus =99 )t        
+				    WHERE (rel.fsrmosn = t.mosn OR rel.ftrmosn = t.mosn  )          AND  mo.fmotype LIKE "12%" AND ((mo.mosn = rel.fsrmosn OR mo.mosn = rel.ftrmosn) AND mo.mosn != t.mosn )         GROUP BY mosn      
+				    )bb WHERE aa.mosn = bb.mosn GROUP BY bb.fshareid,aa.fseverity )dd  group by dd.fseverity)tf)tp GROUP BY tp.fSeverity 
+			)allABT
 		)datangjituanbenbu,
 		(
 		select tttt.critical, tttt.major,tttt.minor,tttt.warnning,tttt.unkown,(tttt.critical+tttt.major+tttt.minor+tttt.warnning+tttt.unkown) as sumnum from (
@@ -221,6 +230,85 @@
 		WHERE tm.fCtID = tt.ctid))th WHERE 
 		    th.mosn = tf.mosn GROUP BY tf.fSeverity)tp GROUP BY tp.fSeverity )ttt)tttt
 		)datangfengongsi
+	</select>
+	
+	<!-- 集团公司总部告警  -->
+	<select id="alarmHeader" resultType="String" parameterType="int">
+		SELECT  SUM(CASE WHEN fseverity IS NOT NULL THEN num ELSE 0 END ) as alarmHeader
+		FROM (
+			SELECT SUM(tp.num) AS num,tp.fip,tp.fcause,tp.fseverity FROM ( 
+								
+				SELECT tf.num,CASE WHEN  tf.fseverity=5 THEN "严重报警" 
+									 WHEN  tf.fseverity=4 THEN "主要报警" 
+									 WHEN  tf.fseverity=3 THEN "次要报警" 
+									 WHEN  tf.fseverity=2 THEN "警告报警" 
+									 WHEN  tf.fseverity=1 THEN "未知报警" END fip,tf.mosn,tf.fcause,tf.fseverity FROM  (  SELECT sum(dd.num ) as num,dd.mosn,dd.fseverity,dd.fcause,dd.fshareid ,dd.fname FROM (    
+			 
+			SELECT COUNT(bb.fshareid) AS num,aa.mosn,aa.fseverity,aa.fcause,bb.fshareid ,bb.fname    
+				FROM (        
+					SELECT mosn,fSeverity,fcause,flasttime FROM tfactive )aa ,       
+					 (SELECT tcc.mosn,tcc.fshareid,tcc.fname  FROM  tcmo tcc,tmdatangintegr tmm WHERE tcc.fstatus =99  AND  tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid       
+						 UNION               SELECT tm.mosn,tt.fshareid,tt.fname FROM tmct tm ,              (SELECT tc.ctid,t.mosn,t.fshareid,t.fname,t.ftitle FROM tcapct tc,            
+					 (SELECT tcc.mosn ,tcc.fshareid,tcc.fname,tmm.ftitle FROM  tcmo tcc,tmdatangintegr tmm                     WHERE tcc.fstatus =99    AND tcc.fshareid = tmm.sn GROUP BY tcc.mosn,tcc.fshareid                    ) t         
+							WHERE  t.mosn = tc.mosn               )tt              WHERE tm.fCtID = tt.ctid            UNION     
+			
+					 SELECT  mo.mosn,t.fshareid,t.fname FROM tcmo mo, trrelation rel,(SELECT mosn,fname,fshareid FROM tcmo WHERE fstatus =99 )t        
+					WHERE (rel.fsrmosn = t.mosn OR rel.ftrmosn = t.mosn  )          AND  mo.fmotype LIKE "12%" AND ((mo.mosn = rel.fsrmosn OR mo.mosn = rel.ftrmosn) AND mo.mosn != t.mosn )         GROUP BY mosn      
+					)bb WHERE aa.mosn = bb.mosn GROUP BY bb.fshareid,aa.fseverity )dd  group by dd.fseverity)tf)tp GROUP BY tp.fSeverity 
+		)allABT
+	</select>
+	<!-- 集团公司总部告警原因  ????:206 -->
+	<select id="alarmNetworkUnreach_alarmURL_alarmHeaderOther" resultType="String" parameterType="int">
+		select tttt.major as alarmNetworkUnreach,tttt.minor as alarmURL,tttt.warnning  as alarmHeaderOther 
+		from ( 
+			SELECT  Max(CASE WHEN ttt.fcause='网络不通' THEN ttt.num else 0 END) major,
+			   Max( CASE WHEN ttt.fcause='URL错误' THEN ttt.num  else 0 END )minor, 
+			  Max(CASE WHEN ttt.fcause='其它' THEN ttt.num else 0 END )warnning 
+			      FROM ( select sum(tt.num) as num,tt.fcause from ( 
+			SELECT COUNT(*) AS num,    CASE WHEN tf.fcause="设备不可达" THEN "网络不通"          
+			      WHEN tf.fcause="拨测连接失败" THEN "网络不通"                WHEN tf.fcause="拨测连接超时" THEN "网络不通"                WHEN tf.fcause="拨测未知错误" THEN "网络不通"             
+			   WHEN tf.fcause="URL应答码错误" THEN "URL错误"   else '其它'  END fcause FROM tfactive tf,          ( SELECT mosn FROM tcmo WHERE  fstatus =99 UNION            (SELECT tm.mosn FROM tmct tm , 
+			(SELECT tc.ctid FROM tcapct tc,tcmo t            WHERE t.fstatus =99 AND t.mosn = tc.MOSN)tt WHERE tm.fCtID = tt.ctid))th WHERE             tf.fSeverity=5 AND th.mosn = tf.mosn GROUP BY fcause    )tt group by tt.fcause)ttt 
+		)tttt
+	</select>
+	<!-- 系统不可访问  d_alarm_summary_dt_lb_cd.xml:206 -->
+	<select id="infoSysInaccess_sysNetworkUnreach_sysURLUnreach_otherUnreach" resultType="String" parameterType="int">
+		SELECT invalid as infoSysInaccess, sysNetworkUnreach, sysURLUnreach, (invalid-sysNetworkUnreach-sysURLUnreach) as otherUnreach
+		FROM 
+		(
+		select count(distinct mosn) as invalid 
+		from tcmo 
+		where fmotype like "ap%" and mosn in 
+			(
+			select   mosn from tcapct where ctid in 
+				(
+				select fctid from tmct where mosn in 
+					(
+					select  distinct mosn from tfactive 
+					where  fcause in ('拨测连接失败','URL应答码错误','拨测未知错误','拨测连接超时','域名解析错误')
+					
+					)
+				)
+			)
+		)unreach,
+		(
+			SELECT SUM( CASE WHEN fip='网络不通' THEN num ELSE 0 END) as sysNetworkUnreach ,
+						SUM( CASE WHEN fip='URL错误' THEN num ELSE 0 END) as sysURLUnreach
+			FROM (
+				SELECT tt.fcause AS fip,SUM(tt.num) AS num FROM (SELECT COUNT(*) AS num,
+						CASE WHEN tf.fcause="设备不可达" THEN "网络不通" 
+								 WHEN tf.fcause="拨测连接失败" THEN "网络不通" 
+								 WHEN tf.fcause="拨测连接超时" THEN "网络不通" 
+								 WHEN tf.fcause="拨测未知错误" THEN "网络不通" 
+								 WHEN tf.fcause="URL应答码错误" THEN "URL错误" else '其它' END fcause FROM tfactive tf,
+						( SELECT mosn FROM tcmo WHERE  fmotype like "ap%" UNION 
+						 (SELECT tm.mosn FROM tmct tm ,(SELECT tc.ctid FROM tcapct tc,tcmo t 
+						 WHERE t.fmotype like "ap%" AND t.mosn = tc.MOSN)tt WHERE tm.fCtID = tt.ctid))th WHERE 
+		
+				tf.fSeverity=5 AND th.mosn = tf.mosn GROUP BY fcause
+				)tt GROUP BY fcause
+			)reason
+		)unreachReason
 	</select>
 	
 </mapper>

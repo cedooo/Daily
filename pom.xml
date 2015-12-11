@@ -66,6 +66,8 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/resources/font/iTextAsianCmaps.jar</systemPath>
 		</dependency>
+		
+		
 		<!-- 
 		 -->
 		<!-- 
@@ -132,5 +134,16 @@
 			<scope>system</scope>
 		</dependency>
 		 -->
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
 	</dependencies>
 </project>

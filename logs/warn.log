@@ -1,0 +1,2 @@
+2015-12-11 12:00:49,759 WARN  [BasicResourcePool.java:291] : Bad pool size config, start 3 < min 5. Using 5 as start.
+2015-12-11 12:01:19,384 WARN  [BasicResourcePool.java:291] : Bad pool size config, start 3 < min 5. Using 5 as start.
