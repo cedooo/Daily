@@ -25,7 +25,7 @@ public class MapperBuilder {
 		try {
 			inputStream = Resources.getResourceAsStream(MAPPER_CONFIG_PATH);
 			//-- Mybatis XMLConfigBuilder : http://mybatis.org/mybatis-3/zh/java-api.html
-			XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, null, null);
+			XMLConfigBuilder parser = new XMLConfigBuilder(inputStream);
 			config = parser.parse();
 		} catch (IOException e) {
 			e.printStackTrace();
