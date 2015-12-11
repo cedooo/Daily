@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.mapping.BoundSql;
 
+import cn.com.dhcc.adam.dailytask.datang.GenerateReport;
 import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
 
 import junit.framework.TestCase;
@@ -27,7 +28,7 @@ public class ReportQueryTest extends TestCase {
 	 */
 	public void testQueryAlarmSQL() {
 		String key = attar[0];
-		Integer i = 2;
+		Integer i = GenerateReport.TYPE_WEEKLY;
 		
 		MapperBuilder mb = new MapperBuilder();
 		Map<String, BoundSql> maps = mb.getSqls(i);

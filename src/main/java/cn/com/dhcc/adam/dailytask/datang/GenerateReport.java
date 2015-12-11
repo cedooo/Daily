@@ -19,15 +19,21 @@ public class GenerateReport {
 	public static final int TYPE_MONTHLY = 3;
 	public static final int TYPE_YEARLY = 4;
 
+	
+	public final static String TEMPLATE_DAILY = "/cn/com/dhcc/adam/dailytask/datang/tools/template/daily-template.txt";
+	public final static String TEMPLATE_WEEKLY = "/cn/com/dhcc/adam/dailytask/datang/tools/template/weekly-template.txt";
+	public final static String TEMPLATE_MONTHLY = "/cn/com/dhcc/adam/dailytask/datang/tools/template/monthly-template.txt";
 	/**
 	 * 产生报表
-	 * 
 	 * @param path
+	 * 		报表文件存储目录
 	 * @param filename
+	 * 		报表文件名称
 	 * @param dmsn
+	 * 		域
 	 * @param type
-	 *            报表类型
-	 * @return JasperReport
+	 *      报表类型
+	 * @return JasperReportBuilder对象
 	 */
 	public JasperReportBuilder build(String path, String fileName, String dmsn,
 			int type) {
@@ -35,13 +41,13 @@ public class GenerateReport {
 		
 		switch (type) {
 		case TYPE_DAILY:
-			reportBuilder = new TemplateReportBuilder("/cn/com/dhcc/adam/dailytask/datang/tools/template/daily-template.txt",TYPE_DAILY);
+			reportBuilder = new TemplateReportBuilder(TEMPLATE_DAILY, TYPE_DAILY);
 			break;
 		case TYPE_WEEKLY:
-			reportBuilder = new TemplateReportBuilder("/cn/com/dhcc/adam/dailytask/datang/tools/template/weekly-template.txt",TYPE_WEEKLY);
+			reportBuilder = new TemplateReportBuilder(TEMPLATE_WEEKLY, TYPE_WEEKLY);
 			break;
 		case TYPE_MONTHLY:
-			reportBuilder = new TemplateReportBuilder("/cn/com/dhcc/adam/dailytask/datang/tools/template/monthly-template.txt",TYPE_MONTHLY);
+			reportBuilder = new TemplateReportBuilder(TEMPLATE_MONTHLY, TYPE_MONTHLY);
 			break;
 		case TYPE_YEARLY:
 		default:

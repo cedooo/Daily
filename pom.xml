@@ -26,6 +26,7 @@
 			<artifactId>dynamicreports-core</artifactId>
 			<version>2.5.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>

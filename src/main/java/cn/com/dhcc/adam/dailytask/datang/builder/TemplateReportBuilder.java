@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.dynamicreports.report.exception.DRException;
+import cn.com.dhcc.adam.dailytask.datang.GenerateReport;
 import cn.com.dhcc.adam.dailytask.datang.query.ReportQuery;
 import cn.com.dhcc.adam.dailytask.datang.tools.TxtReportTemplate;
 /**
@@ -61,7 +62,7 @@ public class TemplateReportBuilder extends AbstractReportBuilder {
 	
 	public static void main(String[] args) {
 		try {
-			new TemplateReportBuilder( "src/main/java/cn/com/dhcc/adam/dailytask/datang/tools/template.txt",1).build().show();
+			new TemplateReportBuilder( GenerateReport.TEMPLATE_DAILY, GenerateReport.TYPE_DAILY).build().show();
 		} catch (DRException e) {
 			e.printStackTrace();
 		}

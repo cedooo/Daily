@@ -128,18 +128,18 @@
 			FROM(
 				SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
 				FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id 
-				WHERE 
-				<if test="value==1">
-					DATEDIFF(tm.col_time,NOW())=-1
-				</if>
-				<if test="value==2">
-					YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
-				</if>
-				<if test="value==3">
-					YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-					AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-				</if> 
-						
+				<where>
+					<if test="value==1">
+						DATEDIFF(tm.col_time,NOW())=-1
+					</if>
+					<if test="value==2">
+						YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+					</if>
+					<if test="value==3">
+						YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+						AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+					</if> 
+				</where>	
 				group by  cm.m_name  
 				ORDER BY  sum(in_flows+out_flows) DESC
 			)t
@@ -151,18 +151,18 @@
 			FROM(
 				SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access
 				FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id 
-				WHERE 
-				<if test="value==1">
-					DATEDIFF(tm.col_time,NOW())=-1
-				</if>
-				<if test="value==2">
-					YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
-				</if>
-				<if test="value==3">
-					YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-					AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
-				</if> 
-						
+				<where> 
+					<if test="value==1">
+						DATEDIFF(tm.col_time,NOW())=-1
+					</if>
+					<if test="value==2">
+						YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+					</if>
+					<if test="value==3">
+						YEAR(tm.col_time) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+						AND MONTH(tm.col_time) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+					</if> 
+				</where>	
 				group by  cm.m_name  
 				ORDER BY  sum(in_flows+out_flows) ASC
 			)t

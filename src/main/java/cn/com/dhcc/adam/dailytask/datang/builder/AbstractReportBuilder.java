@@ -39,7 +39,8 @@ public class AbstractReportBuilder implements IReportBuilder {
 	@SuppressWarnings("deprecation")
 	public AbstractReportBuilder() {
 		contents = new LinkedHashMap<String,List<String>>();
-		plainStyle = stl.style().setPdfFontName("STSong-Light").setPdfEncoding(PdfEncoding.UniGB_UCS2_H_Chinese_Simplified) ;//.setFontName("Arial");
+		plainStyle = stl.style().setPdfFontName("STSong-Light")
+				.setPdfEncoding(PdfEncoding.UniGB_UCS2_H_Chinese_Simplified) ;//.setFontName("Arial");
 	}
 
 	@Override
