@@ -25,6 +25,7 @@ public class DevTestDBManager {
 			Statement sta = conn.createStatement();
 			ResultSet result = sta.executeQuery(sql);
 			while(result.next()){
+				System.err.println(result.getCursorName());
 				Map<String, String> maps = new HashMap<String, String>();
 				for (int i = 0; i < attribute.length; i++) {
 					String attr = attribute[i];

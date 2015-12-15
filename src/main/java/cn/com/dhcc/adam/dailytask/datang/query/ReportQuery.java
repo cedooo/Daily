@@ -12,12 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.mapping.BoundSql;
 
 import cn.com.dhcc.adam.dailytask.datang.GenerateReport;
 import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
 
 public class ReportQuery {
+	private static final Log logger = LogFactory.getLog(ReportQuery.class);
+	
 	private Map<String, Object> resultMap =  new HashMap<String, Object>();
 	private SimpleDateFormat dailyDateTimeFormat = new SimpleDateFormat(
 			"MM月dd日");
@@ -60,7 +64,7 @@ public class ReportQuery {
 	}
 
 
-	private final boolean production = false;
+	private final boolean production = true;
 	/**
 	 * 查询所有属性
 	 * 
@@ -84,15 +88,14 @@ public class ReportQuery {
 				BoundSql boundSql = msb.get(sqlKey);
 				try {
 					String attrID = sqlKey;
-					String attrsID[] = attrID.split("_");
 					
 					data = jat.getListForMap(boundSql.getSql());
-System.out.println("executeQuery  " + attrID +  ": " + boundSql.getSql());
+					logger.debug("execute query SQL for [ " + attrID +  " ] : " + boundSql.getSql());
 					if(data!=null ){
 						for (Map<String,String> resultMap : data) {
-							for(String key : resultMap.keySet()){
-								String value = resultMap.get(key);
-								queryResultMap.put(attrID, value);
+							for(String mapKey : resultMap.keySet()){
+								String value = resultMap.get(mapKey);
+								queryResultMap.put(mapKey, value);
 							}
 						}
 					}else{
@@ -112,7 +115,6 @@ System.out.println("executeQuery  " + attrID +  ": " + boundSql.getSql());
 				
 				 List<Map<String, String>> values = DevTestDBManager
 						.executeSQL(boundSql.getSql(), attrsID);
-System.out.println("executeQuery  " + attrID +  ": " + boundSql.getSql());
 				for (Map<String, String> map : values) {
 					for (String mapKey : map.keySet()) {
 						queryResultMap.put(mapKey, map.get(mapKey));
