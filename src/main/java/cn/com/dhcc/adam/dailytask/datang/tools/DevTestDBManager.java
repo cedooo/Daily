@@ -4,9 +4,11 @@ import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,9 +73,15 @@ public class DevTestDBManager {
 			Connection conn = cpds.getConnection();
 			Statement sta = conn.createStatement();
 			ResultSet result = sta.executeQuery(sql);
+			ResultSetMetaData metaData = result.getMetaData();
+			String[] columnsName = new String[metaData.getColumnCount()];
+			for (int i=0; i< columnsName.length; i++) {
+				columnsName[i] = metaData.getColumnName(i+1);
+			}
+			System.out.println(Arrays.toString(columnsName));
 			while(result.next()){
 				Map<String, String> maps = new HashMap<String, String>();
-				for (int i = 0; i < attribute.length; i++) {
+				for (int i = 0; i < columnsName.length; i++) {
 					String attr = attribute[i];
 					String value = result.getString(attr);
 					maps.put(attribute[i], value);
@@ -93,7 +101,7 @@ public class DevTestDBManager {
 		attr[1] = "dy";
 		System.out
 				.println(DevTestDBManager
-						.executeSQL("select count(*) as tot ,now() as dy  from v_azy_temp_hum", attr)
+						.executeSQLInPooledDBSource("select count(*) as tot ,now() as dy  from v_azy_temp_hum", attr)
 						);
 	}
 	
