@@ -2,7 +2,6 @@ package cn.com.dhcc.adam.dailytask.datang.tools;
 
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -21,38 +20,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class DevTestDBManager {
 	private static final Log logger = LogFactory.getLog(DevTestDBManager.class);
 
-	/**
-	 * @deprecated
-	 * @param sql
-	 * @param attribute
-	 * @return
-	 */
-	public static List<Map<String, String>> executeSQL(String sql, String[] attribute){
-		List<Map<String, String>> listMaps = new ArrayList<Map<String, String>>();
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.0.104:3306/dmsn_998","root","root");
-			Statement sta = conn.createStatement();
-			ResultSet result = sta.executeQuery(sql);
-			while(result.next()){
-				System.err.println(result.getCursorName());
-				Map<String, String> maps = new HashMap<String, String>();
-				for (int i = 0; i < attribute.length; i++) {
-					String attr = attribute[i];
-					String value = result.getString(attr);
-					maps.put(attribute[i], value);
-				}
-				listMaps.add(maps);
-			}
-			conn.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return listMaps;
-		
-	}
 	private static ComboPooledDataSource cpds;
 	static{
 		cpds = new ComboPooledDataSource();
