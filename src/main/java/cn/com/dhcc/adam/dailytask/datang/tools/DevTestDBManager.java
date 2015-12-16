@@ -8,15 +8,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 
 public class DevTestDBManager {
+	private static final Log logger = LogFactory.getLog(DevTestDBManager.class);
 
 	
 	public static List<Map<String, String>> executeSQL(String sql, String[] attribute){
@@ -64,7 +67,7 @@ public class DevTestDBManager {
 		cpds.setMaxPoolSize(20);
 	}
 	
-	public static List<Map<String, String>> executeSQLInPooledDBSource(String sql, String[] attribute){
+	public static List<Map<String, String>> executeSQLInPooledDBSource(String sql){
 	
 		
 		
@@ -76,15 +79,14 @@ public class DevTestDBManager {
 			ResultSetMetaData metaData = result.getMetaData();
 			String[] columnsName = new String[metaData.getColumnCount()];
 			for (int i=0; i< columnsName.length; i++) {
-				columnsName[i] = metaData.getColumnName(i+1);
+				columnsName[i] = metaData.getColumnLabel(i+1);
 			}
-			System.out.println(Arrays.toString(columnsName));
+			//System.out.println(Arrays.toString(columnsName));
 			while(result.next()){
 				Map<String, String> maps = new HashMap<String, String>();
 				for (int i = 0; i < columnsName.length; i++) {
-					String attr = attribute[i];
-					String value = result.getString(attr);
-					maps.put(attribute[i], value);
+					String value = result.getString(columnsName[i]);
+					maps.put(columnsName[i], value);
 				}
 				listMaps.add(maps);
 			}
@@ -96,13 +98,38 @@ public class DevTestDBManager {
 		return null;
 	}
 	public static void main(String[] args) {
-		String attr[] = new String[2];
+		/*String attr[] = new String[2];
 		attr[0] = "tot";
 		attr[1] = "dy";
-		System.out
-				.println(DevTestDBManager
-						.executeSQLInPooledDBSource("select count(*) as tot ,now() as dy  from v_azy_temp_hum", attr)
-						);
+		System.out.println(DevTestDBManager.executeSQLInPooledDBSource("select count(*) as tot ,now() as dy  from v_azy_temp_hum", attr));*/
+		String ssql = "SELECT mat.accessSys as accessMostSys, mat.access as accessMost, " + 
+				 "mit.accessSys as accessLeastSys, mit.access as accessLeast " + 
+			 "FROM " + 
+			 "( " + 
+			 "	SELECT  accessSys,access " + 
+			 "FROM( " + 
+			 "SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access " + 
+			 "FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id  " + 
+			 " WHERE YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK)) 	 " + 
+			 "group by  cm.m_name   " + 
+			 "	ORDER BY  sum(in_flows+out_flows) DESC " + 
+			 ")t " + 
+			 "WHERE t.accessSys IS NOT NULL " + 
+			 "LIMIT 1  " + 
+			 ")mat, " + 
+			 "( " + 
+			 "SELECT  accessSys,access " + 
+			 "FROM( " + 
+			 "SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access " + 
+			 "FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id  " + 
+			 " WHERE YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK)) 	 " + 
+			 "group by  cm.m_name   " + 
+			 "ORDER BY  sum(in_flows+out_flows) ASC " + 
+			 ")t " + 
+			 "WHERE t.accessSys IS NOT NULL " + 
+			 "LIMIT 1  " + 
+			 ")mit";
+		logger.info("exclude attr array: " + DevTestDBManager.executeSQLInPooledDBSource(ssql));
 	}
 	
 }

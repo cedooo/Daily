@@ -1,7 +1,9 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!-- 
+	<select /> 中 id是必须且不可重复属性， select sql结果的"列名"必须要和模版中属性的名称一致
+ -->
 <mapper namespace="query">
 	<!-- d_alarm_summary_dt_statistics.xml:61 -->
 	<!-- 集团公司系统运行信息系统 -->

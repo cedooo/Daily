@@ -64,7 +64,7 @@ public class ReportQuery {
 	}
 
 
-	private final boolean production = true;
+	private final boolean production = false;
 	/**
 	 * 查询所有属性
 	 * 
@@ -110,11 +110,8 @@ public class ReportQuery {
 		}else{
 			for (String sqlKey : msb.keySet()) {
 				BoundSql boundSql = msb.get(sqlKey);    // BoundSql bsql暂时只支持传入报表类型作为参数
-				String attrID = sqlKey;
-				String attrsID[] = attrID.split("_");
 				
-				 List<Map<String, String>> values = DevTestDBManager
-						.executeSQL(boundSql.getSql(), attrsID);
+				 List<Map<String, String>> values = DevTestDBManager.executeSQLInPooledDBSource(boundSql.getSql());
 				for (Map<String, String> map : values) {
 					for (String mapKey : map.keySet()) {
 						queryResultMap.put(mapKey, map.get(mapKey));
