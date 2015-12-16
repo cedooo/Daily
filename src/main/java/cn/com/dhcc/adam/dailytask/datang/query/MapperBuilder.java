@@ -17,7 +17,7 @@ public class MapperBuilder {
 	/**
 	 * mapper配置路径
 	 */
-	private static final String MAPPER_CONFIG_PATH = "cn/com/dhcc/adam/dailytask/datang/query/mapper-config.xml";
+	private static final String MAPPER_CONFIG_PATH = "mapper-config.xml";
 	private Configuration config;
 	
 	public MapperBuilder(){

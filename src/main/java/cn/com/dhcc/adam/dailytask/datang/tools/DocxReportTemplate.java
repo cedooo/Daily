@@ -10,7 +10,11 @@ import java.util.List;
 import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-
+/**
+ * NOT implements
+ * @author cd
+ *
+ */
 public class DocxReportTemplate {
 	public List<String> reportTemplate(String filePath){
 		List<String> listStr = new ArrayList<String>();

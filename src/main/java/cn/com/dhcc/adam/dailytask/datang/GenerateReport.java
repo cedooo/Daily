@@ -20,9 +20,9 @@ public class GenerateReport {
 	public static final int TYPE_YEARLY = 4;
 
 	
-	public final static String TEMPLATE_DAILY = "/cn/com/dhcc/adam/dailytask/datang/tools/template/daily-template.txt";
-	public final static String TEMPLATE_WEEKLY = "/cn/com/dhcc/adam/dailytask/datang/tools/template/weekly-template.txt";
-	public final static String TEMPLATE_MONTHLY = "/cn/com/dhcc/adam/dailytask/datang/tools/template/monthly-template.txt";
+	public final static String TEMPLATE_DAILY = "/template/daily-template.txt";
+	public final static String TEMPLATE_WEEKLY = "/template/weekly-template.txt";
+	public final static String TEMPLATE_MONTHLY = "/template/monthly-template.txt";
 	/**
 	 * 产生报表
 	 * @param path

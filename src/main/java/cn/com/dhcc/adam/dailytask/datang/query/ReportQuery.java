@@ -64,7 +64,7 @@ public class ReportQuery {
 	}
 
 
-	private final boolean production = true;
+	private final boolean production = false;
 	/**
 	 * 查询所有属性
 	 * 

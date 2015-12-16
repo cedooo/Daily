@@ -21,12 +21,17 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 public class DevTestDBManager {
 	private static final Log logger = LogFactory.getLog(DevTestDBManager.class);
 
-	
+	/**
+	 * @deprecated
+	 * @param sql
+	 * @param attribute
+	 * @return
+	 */
 	public static List<Map<String, String>> executeSQL(String sql, String[] attribute){
 		List<Map<String, String>> listMaps = new ArrayList<Map<String, String>>();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dmsn_998","root","root");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://192.168.0.104:3306/dmsn_998","root","root");
 			Statement sta = conn.createStatement();
 			ResultSet result = sta.executeQuery(sql);
 			while(result.next()){
@@ -56,7 +61,7 @@ public class DevTestDBManager {
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
 		}          
-		cpds.setJdbcUrl("jdbc:mysql://localhost:3306/dmsn_998" );
+		cpds.setJdbcUrl("jdbc:mysql://192.168.0.104:3306/dmsn_998" );
 		cpds.setUser("root");                                  
 		cpds.setPassword("root");                                  
 			
@@ -107,7 +112,6 @@ public class DevTestDBManager {
 			 "FROM( " + 
 			 "SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access " + 
 			 "FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id  " + 
-			 " WHERE YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK)) 	 " + 
 			 "group by  cm.m_name   " + 
 			 "	ORDER BY  sum(in_flows+out_flows) DESC " + 
 			 ")t " + 
@@ -119,7 +123,6 @@ public class DevTestDBManager {
 			 "FROM( " + 
 			 "SELECT cm.m_name as accessSys, sum(in_flows+out_flows) as access " + 
 			 "FROM data_monitor_traffic_m tm  LEFT JOIN cfg_monitor cm   ON  tm.m_id = cm.m_id  " + 
-			 " WHERE YEARWEEK(tm.col_time) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK)) 	 " + 
 			 "group by  cm.m_name   " + 
 			 "ORDER BY  sum(in_flows+out_flows) ASC " + 
 			 ")t " + 

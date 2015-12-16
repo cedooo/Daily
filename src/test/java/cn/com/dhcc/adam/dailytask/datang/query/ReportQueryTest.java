@@ -38,7 +38,7 @@ public class ReportQueryTest extends TestCase {
 		logger.debug("the SQL to be execut:" + bsql.getSql());
 		List<Map<String, String>> lm = DevTestDBManager.executeSQLInPooledDBSource(
 				bsql.getSql());
-		System.out.println(lm);
-		assertEquals(true, lm!=null&&lm.size()>0);
+		logger.debug("execute SQL result: " + lm);
+		assertEquals(true, lm!=null);
 	}
 }
