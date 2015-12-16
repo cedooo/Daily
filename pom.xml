@@ -57,7 +57,7 @@
 			<artifactId>iTextAsianCmaps</artifactId>
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/font/iTextAsian.jar</systemPath>
+			<systemPath>${project.basedir}/append/font/iTextAsian.jar</systemPath>
 		</dependency>
 		
 		<dependency>
@@ -65,7 +65,7 @@
 			<artifactId>iTextAsian</artifactId>
 			<version>version-3.6-SNAPSHOT</version>
 			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/font/iTextAsianCmaps.jar</systemPath>
+			<systemPath>${project.basedir}/append/font/iTextAsianCmaps.jar</systemPath>
 		</dependency>
 		
 		<!-- 

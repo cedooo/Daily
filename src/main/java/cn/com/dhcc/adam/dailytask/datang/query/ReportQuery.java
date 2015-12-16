@@ -88,7 +88,6 @@ public class ReportQuery {
 				BoundSql boundSql = msb.get(sqlKey);
 				try {
 					String attrID = sqlKey;
-					
 					data = jat.getListForMap(boundSql.getSql());
 					logger.debug("execute query SQL for [ " + attrID +  " ] : " + boundSql.getSql());
 					if(data!=null ){
