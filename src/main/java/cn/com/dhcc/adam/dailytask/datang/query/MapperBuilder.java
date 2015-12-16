@@ -24,7 +24,9 @@ public class MapperBuilder {
 		InputStream inputStream = null;
 		try {
 			inputStream = Resources.getResourceAsStream(MAPPER_CONFIG_PATH);
-			//-- Mybatis XMLConfigBuilder : http://mybatis.org/mybatis-3/zh/java-api.html
+			/*
+			 *  Mybatis XMLConfigBuilder http://mybatis.org/mybatis-3/zh/java-api.html
+			 */
 			XMLConfigBuilder parser = new XMLConfigBuilder(inputStream);
 			config = parser.parse();
 		} catch (IOException e) {
@@ -47,7 +49,7 @@ public class MapperBuilder {
 		for (MappedStatement mappedStatement : mappedStatements) {
 			String attrID = mappedStatement.getId().split("\\.")[1];
 			SqlSource sqlSource = mappedStatement.getSqlSource();
-			BoundSql bsql = sqlSource.getBoundSql(type);    // BoundSql bsql暂时只支持传入报表类型作为参数
+			BoundSql bsql = sqlSource.getBoundSql(type);
 			sqlMap.put(attrID, bsql);
 		}
 		return sqlMap;

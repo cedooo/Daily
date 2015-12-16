@@ -1,7 +1,11 @@
 package cn.com.dhcc.adam.dailytask.datang;
 
 import junit.framework.TestCase;
-
+/**
+ * 测试生成 日报 周报 月报
+ * @author cedo
+ *
+ */
 public class GenerateReportTest extends TestCase {
 	private GenerateReport gr = new GenerateReport();
 	String path = "D:/";

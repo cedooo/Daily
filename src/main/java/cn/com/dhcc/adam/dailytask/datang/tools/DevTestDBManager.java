@@ -40,13 +40,12 @@ public class DevTestDBManager {
 				listMaps.add(maps);
 			}
 			conn.close();
-			return listMaps;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return listMaps;
 		
 	}
 	private static ComboPooledDataSource cpds;
@@ -56,8 +55,8 @@ public class DevTestDBManager {
 			cpds.setDriverClass( "com.mysql.jdbc.Driver" );
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
-		} //loads the jdbc driver            
-		cpds.setJdbcUrl( "jdbc:mysql://localhost:3306/dmsn_998" );
+		}          
+		cpds.setJdbcUrl("jdbc:mysql://localhost:3306/dmsn_998" );
 		cpds.setUser("root");                                  
 		cpds.setPassword("root");                                  
 			
@@ -69,8 +68,6 @@ public class DevTestDBManager {
 	
 	public static List<Map<String, String>> executeSQLInPooledDBSource(String sql){
 	
-		
-		
 		List<Map<String, String>> listMaps = new ArrayList<Map<String, String>>();
 		try {
 			Connection conn = cpds.getConnection();

@@ -3,6 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 
 	<select /> 中 id是必须且不可重复属性， select sql结果的"列名"必须要和模版中属性的名称一致
+	<if test="value==1"> value==1 日报  value==2  周 报  value==3   月报 
  -->
 <mapper namespace="query">
 	<!-- d_alarm_summary_dt_statistics.xml:61 -->
@@ -311,6 +312,29 @@
 				)tt GROUP BY fcause
 			)reason
 		)unreachReason
+	</select>
+	<!-- 服务器运行监测  d_host_cpu_analysis.xml:-->
+	<select id="server" resultType="String" parameterType="int">
+		SELECT  aa.fname as vipSeverCPUMaxSys, bb.ftotalcpumax as vipSeverCPUMaxValue
+		FROM (
+			SELECT mosn, MAX(ftotalcpu) AS ftotalcpumax, MIN(ftotalcpu) AS ftotalcpumin, ROUND(AVG(ftotalcpu),2) AS ftotalcpuavg  
+			FROM tphocpu a,(SELECT fRMOSN  FROM tmsysobjectauth WHERE fAuth!='n' AND fuserid='9980000000000000' group by  frmosn)b 
+			WHERE a.mosn = b.frmosn AND fpartid = '-92'
+				<if test="value==1">
+					AND DATEDIFF(fcollecttime,NOW())=-1
+				</if>
+				<if test="value==2">
+					AND YEARWEEK(fcollecttime) = YEARWEEK(DATE_SUB(CURDATE(),INTERVAL 1 WEEK))
+				</if>
+				<if test="value==3">
+					AND YEAR(fcollecttime) = YEAR(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+					AND MONTH(fcollecttime) = MONTH(DATE_SUB(CURDATE(),INTERVAL 1 MONTH))
+				</if> 
+			GROUP BY mosn
+		) bb 
+		LEFT JOIN  (SELECT  fname, fip, mosn FROM tcmo t WHERE  fpmosn = -1) aa  
+			ON aa.mosn = bb.mosn 
+		ORDER BY ftotalcpuavg DESC LIMIT 1
 	</select>
 	
 </mapper>

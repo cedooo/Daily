@@ -13,7 +13,7 @@ import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
 import junit.framework.TestCase;
 
 /**
- * @deprecated
+ * 测试本地获取数据
  * @author cedo
  * 
  */

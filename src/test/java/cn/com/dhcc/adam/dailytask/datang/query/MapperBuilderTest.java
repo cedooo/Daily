@@ -10,10 +10,10 @@ public class MapperBuilderTest extends TestCase {
 	private MapperBuilder mb = new MapperBuilder();
 	public void testGetSqls() {
 		Map<String, BoundSql> msb = mb.getSqls(1);
-		System.out.println(msb.size());
 		for (String key : msb.keySet()) {
-			System.out.println(key + ":" + msb.get(key));
+			System.out.println(key + ":" + msb.get(key).getSql());
 		}
+		assertEquals(true, msb!=null);
 	}
 
 }
