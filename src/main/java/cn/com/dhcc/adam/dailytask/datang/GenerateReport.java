@@ -27,12 +27,11 @@ public class GenerateReport {
 	 * 产生报表
 	 * @param path
 	 * 		报表文件存储目录
-	 * @param filename
-	 * 		报表文件名称
+	 * @param fileName 文件名称
 	 * @param dmsn
 	 * 		域
 	 * @param type
-	 *      报表类型
+	 *      报表类型(GenerateReport.TYPE_DAILY-日报，GenerateReport.TYPE_WEEKLY-周报，GenerateReport.TYPE_MONTHLY-月报)
 	 * @return JasperReportBuilder对象
 	 */
 	public JasperReportBuilder build(String path, String fileName, String dmsn,
