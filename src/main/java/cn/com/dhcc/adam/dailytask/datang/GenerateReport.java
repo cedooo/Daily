@@ -45,12 +45,15 @@ public class GenerateReport {
 		
 		switch (type) {
 		case TYPE_DAILY:
+			logger.info("中国大唐集团公司信息系统运行报告  - 日报");
 			reportBuilder = new TemplateReportBuilder(TEMPLATE_DAILY, TYPE_DAILY);
 			break;
 		case TYPE_WEEKLY:
+			logger.info("中国大唐集团公司信息系统运行报告  - 周报");
 			reportBuilder = new TemplateReportBuilder(TEMPLATE_WEEKLY, TYPE_WEEKLY);
 			break;
 		case TYPE_MONTHLY:
+			logger.info("中国大唐集团公司信息系统运行报告  - 月报");
 			reportBuilder = new TemplateReportBuilder(TEMPLATE_MONTHLY, TYPE_MONTHLY);
 			break;
 		case TYPE_YEARLY:
