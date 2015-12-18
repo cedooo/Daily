@@ -11,14 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 
 public class DevTestDBManager {
-	private static final Log logger = LogFactory.getLog(DevTestDBManager.class);
+	private static final Logger logger = Logger.getLogger(DevTestDBManager.class);
 
 	private static ComboPooledDataSource cpds;
 	static{

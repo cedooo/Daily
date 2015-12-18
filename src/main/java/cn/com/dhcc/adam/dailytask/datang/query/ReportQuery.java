@@ -5,22 +5,24 @@ import itims.share.db.ConnException;
 import itims.share.db.DBException;
 import itims.share.db.JdbcAbstractTemplate;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.mapping.BoundSql;
+import org.apache.log4j.Logger;
 
 import cn.com.dhcc.adam.dailytask.datang.GenerateReport;
 import cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager;
 
 public class ReportQuery {
-	private static final Log logger = LogFactory.getLog(ReportQuery.class);
+	private static final Logger logger = Logger.getLogger(ReportQuery.class);
 	
 	private Map<String, Object> resultMap =  new HashMap<String, Object>();
 	private SimpleDateFormat dailyDateTimeFormat = new SimpleDateFormat(
@@ -35,16 +37,22 @@ public class ReportQuery {
 	public ReportQuery(int type){
 		switch (type) {
 		case GenerateReport.TYPE_DAILY:
+			logger.debug("生成日报");
 			dailyDateTime();
 			doQuery(GenerateReport.TYPE_DAILY);
+			logger.debug("生成日报完成");
 			break;
 		case GenerateReport.TYPE_WEEKLY:
+			logger.debug("生成周报");
 			weeklyDateTime();
 			doQuery(GenerateReport.TYPE_WEEKLY);
+			logger.debug("生成周报完成");
 			break;
 		case GenerateReport.TYPE_MONTHLY:
+			logger.debug("生成月报");
 			monthlyDateTime();
 			doQuery(GenerateReport.TYPE_MONTHLY);
+			logger.debug("生成月报完成");
 			break;
 		case GenerateReport.TYPE_YEARLY:
 		default:
@@ -64,7 +72,27 @@ public class ReportQuery {
 	}
 
 
-	private final boolean production = true;
+	private static boolean production = true;
+	static {
+		String proFileName = "env.properties";
+		Properties pro = new Properties();
+		
+		InputStream is = ClassLoader.getSystemResourceAsStream(proFileName);
+		try {
+			pro.load(is);
+			production = "0".equals(pro.getProperty("dblocal"));
+		} catch (Exception e1) {
+			System.err.println("env.properties不存在");
+		}finally{
+			if(is!=null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	/**
 	 * 查询所有属性
 	 * 
@@ -78,33 +106,37 @@ public class ReportQuery {
 		Map<String, BoundSql> msb = mapperBuilder.getSqls(type);
 		
 		if(production){
-			JdbcAbstractTemplate jat = null;
-			jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
-
-			List<Map<String,String>> data = null;
-			
-			for (String sqlKey : msb.keySet()) {
-				// 从数据库查询对应指标
-				BoundSql boundSql = msb.get(sqlKey);
-				try {
-					String attrID = sqlKey;
-					data = jat.getListForMap(boundSql.getSql());
-					logger.debug("execute query SQL for [ " + attrID +  " ] : " + boundSql.getSql());
-					if(data!=null ){
-						for (Map<String,String> resultMap : data) {
-							for(String mapKey : resultMap.keySet()){
-								String value = resultMap.get(mapKey);
-								queryResultMap.put(mapKey, value);
+			try{
+				JdbcAbstractTemplate jat = null;
+				jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
+	
+				List<Map<String,String>> data = null;
+				
+				for (String sqlKey : msb.keySet()) {
+					// 从数据库查询对应指标
+					BoundSql boundSql = msb.get(sqlKey);
+					try {
+						String attrID = sqlKey;
+						data = jat.getListForMap(boundSql.getSql());
+						logger.debug("execute query SQL for [ " + attrID +  " ] : " + boundSql.getSql());
+						if(data!=null ){
+							for (Map<String,String> resultMap : data) {
+								for(String mapKey : resultMap.keySet()){
+									String value = resultMap.get(mapKey);
+									queryResultMap.put(mapKey, value);
+								}
 							}
+						}else{
+							throw new RuntimeException("SQL错误：可能配置出现语法错误");
 						}
-					}else{
-						throw new RuntimeException("SQL错误：可能配置出现语法错误");
+					} catch (DBException e) {
+						e.printStackTrace();
+					} catch (ConnException e) {
+						e.printStackTrace();
 					}
-				} catch (DBException e) {
-					e.printStackTrace();
-				} catch (ConnException e) {
-					e.printStackTrace();
 				}
+			}catch (Exception e){
+				logger.warn("=====================================================\n数据库连接错误\n===============================");
 			}
 		}else{
 			for (String sqlKey : msb.keySet()) {

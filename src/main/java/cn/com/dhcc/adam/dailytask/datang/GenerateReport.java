@@ -2,6 +2,8 @@ package cn.com.dhcc.adam.dailytask.datang;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import cn.com.dhcc.adam.dailytask.datang.builder.IReportBuilder;
 import cn.com.dhcc.adam.dailytask.datang.builder.TemplateReportBuilder;
 import static net.sf.dynamicreports.report.builder.DynamicReports.export;
@@ -13,6 +15,7 @@ import net.sf.dynamicreports.jasper.builder.export.JasperXlsxExporterBuilder;
 import net.sf.dynamicreports.report.exception.DRException;
 
 public class GenerateReport {
+	private static final Logger logger = Logger.getLogger(GenerateReport.class);
 	// 日周月年
 	public static final int TYPE_DAILY = 1;
 	public static final int TYPE_WEEKLY = 2;
@@ -36,6 +39,8 @@ public class GenerateReport {
 	 */
 	public JasperReportBuilder build(String path, String fileName, String dmsn,
 			int type) {
+		logger.info("中国大唐集团公司信息系统运行报告  - 调用  :  path=" + path + ", fileName =  " + fileName + ", dmsn=" +  dmsn 
+				+ ", type=" + type);
 		IReportBuilder reportBuilder = null;
 		
 		switch (type) {
@@ -58,8 +63,10 @@ public class GenerateReport {
 			}else{
 				throw new RuntimeException("生成报表失败，无法生成报表文件");
 			}
+			logger.info("中国大唐集团公司信息系统运行报告  - 调用完成");
 			return report;
 		} else {
+			logger.info("中国大唐集团公司信息系统运行报告  - 调用完成， 但未生成模版");
 			return null;
 		}
 	}
@@ -73,6 +80,7 @@ public class GenerateReport {
 	 */
 	private int export(JasperReportBuilder report, String path, String fileName,
 			String dmsn) {
+		logger.info("中国大唐集团公司信息系统运行报告  - 生成报表文件开始");
 		String pdfName = path + File.separator + fileName + ".pdf";
 		String excelName = path + File.separator + fileName + ".xlsx";
 		String wordDocxName = path + File.separator + fileName + ".docx";
@@ -92,23 +100,24 @@ public class GenerateReport {
 		try {
 			report.toDocx(wordDocxExporter);
 		} catch (DRException e) {
-			e.printStackTrace();
+			logger.info(" 生成报表文件" + wordDocxName + "失败");
 		}
 		try {
 			report.toPdf(pdfExporter);
 		} catch (DRException e) {
-			e.printStackTrace();
+			logger.info(" 生成报表文件" + pdfName + "失败");
 		}
 		try {
 			report.toXlsx(xlsExporter);
 		} catch (DRException e) {
-			e.printStackTrace();
+			logger.info(" 生成报表文件" + excelName + "失败");
 		}
 		try {
 			report.toRtf(rtfExporter);
 		} catch (DRException e) {
-			e.printStackTrace();
+			logger.info(" 生成报表文件" + rtfName + "失败");
 		}
+		logger.info("中国大唐集团公司信息系统运行报告  - 生成报表文件成功: [" + pdfName + "],[" + excelName + "],[" + wordDocxName + "]");
 		return -1;
 	}
 }
