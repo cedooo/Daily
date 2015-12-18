@@ -39,7 +39,7 @@
 						<configuration>
 							<tasks>
 								<echo>Using dev-env.properties</echo>
-								<copy file="src/main/resources/profile/dev-env.properties"
+								<copy file="append/profile/dev-env.properties"
 									tofile="${project.build.outputDirectory}/env.properties"  overwrite="true"  />
 							</tasks>
 						</configuration>
@@ -53,7 +53,7 @@
 						<configuration>
 							<tasks>
 								<echo>Using production-env.propertie</echo>
-								<copy file="src/main/resources/profile/production-env.properties"
+								<copy file="append/profile/production-env.properties"
 									tofile="${project.build.outputDirectory}/env.properties"  overwrite="true" />
 							</tasks>
 						</configuration>
