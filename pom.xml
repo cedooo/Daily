@@ -14,6 +14,17 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<developers>
+		<developer>
+			<email>cedoo@qq.com</email>
+			<name>Adam</name>
+			<organization>DHC</organization>
+			<organizationUrl>http://www.dhcc.com.cn</organizationUrl>
+			<timezone>+0800</timezone>
+			<url>http://clazz.me</url>
+		</developer>
+	</developers>
+	
 	<build>
 		<plugins>
 			<plugin>
