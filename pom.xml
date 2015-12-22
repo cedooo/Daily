@@ -137,5 +137,11 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/append/font/iTextAsianCmaps.jar</systemPath>
 		</dependency>
+		<dependency>
+		    <groupId>javaee</groupId>
+		    <artifactId>javaee-api</artifactId>
+		    <version>5</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"
 	import="cn.com.dhcc.adam.dailytask.datang.tools.DevTestDBManager,java.util.*,cn.com.dhcc.adam.dailytask.datang.GenerateReport,net.sf.dynamicreports.jasper.builder.JasperReportBuilder"
 	isELIgnored="false"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> --%>
 <%
 	String sql = "SELECT COUNT(*) AS runSys , now() as dt FROM tcmo WHERE fmotype LIKE 'ap%' AND fpmosn = -1";
 	//--用本地数据库测试

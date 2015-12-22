@@ -27,7 +27,7 @@ public class DevTestDBManager {
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
 		}          
-		cpds.setJdbcUrl("jdbc:mysql://192.168.0.104:3306/dmsn_998" );
+		cpds.setJdbcUrl("jdbc:mysql://localhost:3306/dmsn_998" );
 		cpds.setUser("root");                                  
 		cpds.setPassword("root");                                  
 			
