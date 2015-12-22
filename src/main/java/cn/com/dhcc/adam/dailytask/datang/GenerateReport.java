@@ -62,7 +62,8 @@ public class GenerateReport {
 		if (reportBuilder != null) {
 			JasperReportBuilder report = reportBuilder.build();
 			if (report != null) {
-				export(report, path, fileName, dmsn);
+				int exportFileCount = export(report, path, fileName, dmsn);
+				logger.info("共生成了 " + exportFileCount + " 个报表文件");
 			}else{
 				throw new RuntimeException("生成报表失败，无法生成报表文件");
 			}
@@ -79,7 +80,7 @@ public class GenerateReport {
 	 * @param path 存储路径
 	 * @param fileName 报表文件名称
 	 * @param dmsn 域
-	 * @return 
+	 * @return 生成文件个数
 	 */
 	private int export(JasperReportBuilder report, String path, String fileName,
 			String dmsn) {
@@ -100,27 +101,32 @@ public class GenerateReport {
 
 		JasperDocxExporterBuilder wordDocxExporter = export
 				.docxExporter(wordDocxName);
+		int exportCount = 0;
 		try {
 			report.toDocx(wordDocxExporter);
+			exportCount++;
 		} catch (DRException e) {
 			logger.info(" 生成报表文件" + wordDocxName + "失败");
 		}
 		try {
 			report.toPdf(pdfExporter);
+			exportCount++;
 		} catch (DRException e) {
 			logger.info(" 生成报表文件" + pdfName + "失败");
 		}
 		try {
 			report.toXlsx(xlsExporter);
+			exportCount++;
 		} catch (DRException e) {
 			logger.info(" 生成报表文件" + excelName + "失败");
 		}
 		try {
 			report.toRtf(rtfExporter);
+			exportCount++;
 		} catch (DRException e) {
 			logger.info(" 生成报表文件" + rtfName + "失败");
 		}
 		logger.info("中国大唐集团公司信息系统运行报告  - 生成报表文件成功: [" + pdfName + "],[" + excelName + "],[" + wordDocxName + "]");
-		return -1;
+		return exportCount;
 	}
 }

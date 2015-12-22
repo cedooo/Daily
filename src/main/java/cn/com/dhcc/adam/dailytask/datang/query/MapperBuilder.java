@@ -22,7 +22,7 @@ public class MapperBuilder {
 	public MapperBuilder(){
 		InputStream inputStream = null;
 		try {
-			inputStream = ClassLoader.getSystemResourceAsStream(MAPPER_CONFIG_PATH);
+			inputStream = MapperBuilder.class.getClassLoader().getResourceAsStream(MAPPER_CONFIG_PATH);
 			/*
 			 *  Mybatis XMLConfigBuilder http://mybatis.org/mybatis-3/zh/java-api.html
 			 */
