@@ -80,8 +80,8 @@ public class ReportQuery {
 		InputStream is = ReportQuery.class.getClassLoader().getResourceAsStream(proFileName);
 		try {
 			pro.load(is);
-			System.out.println("配置文件中 用本地数据库??:" + "0".equals(pro.getProperty("dblocal")));
-			production = false;//"0".equals(pro.getProperty("dblocal"));
+			System.out.println("配置文件中 不用本地数据库??:" + "0".equals(pro.getProperty("dblocal")));
+			production = "0".equals(pro.getProperty("dblocal"));
 		} catch (Exception e1) {
 			System.err.println("env.properties不存在");
 		}finally{

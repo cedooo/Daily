@@ -8,7 +8,7 @@ import junit.framework.TestCase;
  */
 public class GenerateReportTest extends TestCase {
 	private GenerateReport gr = new GenerateReport();
-	String path = "D:/testGenerate";    //目标文件夹必须已存在
+	String path = "D:/";    //目标文件夹必须已存在
 	String dmsn = "998";
 	/**
 	 * 生成日报表

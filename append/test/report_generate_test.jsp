@@ -5,7 +5,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String sql = "SELECT COUNT(*) AS runSys , now() as dt FROM tcmo WHERE fmotype LIKE 'ap%' AND fpmosn = -1";
-	//List<Map<String, String>> listRe = DevTestDBManager.executeSQLInPooledDBSource(sql);
+	//--用本地数据库测试
+	//List<Map<String, String>> listRe = DevTestDBManager.executeSQLInPooledDBSource(sql); 
+	
+	
 	//JdbcAbstractTemplate jat =  new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
 	//List<Map<String, String>> listRe = jat.getListForMap(sql);
 	
