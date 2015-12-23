@@ -14,21 +14,21 @@ public class GenerateReportTest extends TestCase {
 	 * 生成日报表
 	 */
 	public void testBuildDaily() {
-		gr.build(path, "test-daily", dmsn, GenerateReport.TYPE_DAILY);
+		assertEquals(true,gr.build(path, "test-daily", dmsn, GenerateReport.TYPE_DAILY)!=null);
 	}
 
 	/**
 	 * 生成周报表
 	 */
 	public void testBuildWeekly() {
-		gr.build(path, "test-weekly", dmsn, GenerateReport.TYPE_WEEKLY);
+		assertEquals(true,gr.build(path, "test-weekly", dmsn, GenerateReport.TYPE_WEEKLY)!=null);
 	}
 
 	/**
 	 * 生成月报表
 	 */
 	public void testBuildMonthly() {
-		gr.build(path, "test-monthly", dmsn, GenerateReport.TYPE_MONTHLY);
+		assertEquals(true,gr.build(path, "test-monthly", dmsn, GenerateReport.TYPE_MONTHLY)!=null);
 	}
 
 }
