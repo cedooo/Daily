@@ -16,9 +16,9 @@ public class ReportQueryTest extends TestCase {
 
 	public void testQuery(){
 		ReportQuery rq = new ReportQuery(GenerateReport.TYPE_DAILY);
-		String attribute = "runSys";
-		String rqResult = rq.query(attribute );
-		logger.info(attribute + " = " + rqResult);
+		String runSys = "runSys";
+		String rqResult = rq.query(runSys );
+		logger.info(runSys + " = " + rqResult);
 		assertEquals(true, rqResult!=null);
 	}
 }

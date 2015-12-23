@@ -16,6 +16,7 @@ public class DevTestDBManagerTest extends TestCase {
 	private static final Log logger = LogFactory.getLog(ReportQueryTest.class);
 
 	private String[] attar = {
+			"runSys",
 			"accessMostSys_accessMost_accessLeastSys_accessLeast",
 			"alarmNetworkUnreach_alarmURL_alarmHeaderOther",
 			"infoSysAlarmTotal_infoSysAlarmCommon_infoSysAlarmMinor_infoSysAlarmMain_infoSysAlarmSerious" ,

@@ -66,7 +66,7 @@ public class ReportQuery {
 	 * @return 结果
 	 */
 	public String query(String attribute) {
-		Object value = resultMap.get(attribute);
+		Object value = resultMap.get(attribute.trim());
 		boolean valueValid = value!=null&&!("".equals(value.toString()));
 		return valueValid?value.toString():"____";
 	}
@@ -112,14 +112,13 @@ public class ReportQuery {
 				jat = new JdbcAbstractTemplate(DomainManager.getDbIdByDmsn(998));
 	
 				List<Map<String,String>> data = null;
-				
+				logger.info("==========查询报表数据==========");
 				for (String sqlKey : msb.keySet()) {
 					// 从数据库查询对应指标
 					BoundSql boundSql = msb.get(sqlKey);
 					try {
-						String attrID = sqlKey;
 						data = jat.getListForMap(boundSql.getSql());
-						logger.debug("execute query SQL for [ " + attrID +  " ] : " + boundSql.getSql());
+						//logger.info("execute query SQL [id='" + attrID +  "'] : " + boundSql.getSql());
 						if(data!=null ){
 							for (Map<String,String> resultMap : data) {
 								for(String mapKey : resultMap.keySet()){
@@ -130,12 +129,14 @@ public class ReportQuery {
 						}else{
 							throw new RuntimeException("SQL错误：可能配置出现语法错误");
 						}
+						logger.info(data);
 					} catch (DBException e) {
 						e.printStackTrace();
 					} catch (ConnException e) {
 						e.printStackTrace();
 					}
 				}
+				logger.info("==========查询报表数据-END ==========");
 			}catch (Exception e){
 				logger.warn("=====================================================\n数据库连接错误\n===============================");
 			}
@@ -152,6 +153,7 @@ public class ReportQuery {
 			}
 		}
 		resultMap.putAll(queryResultMap);
+		logger.info("结果集合:" + resultMap);
 	}
 
 	private void dailyDateTime() {
