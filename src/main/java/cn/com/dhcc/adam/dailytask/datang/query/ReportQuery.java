@@ -165,7 +165,7 @@ public class ReportQuery {
 		Calendar preDay = Calendar.getInstance();
 		preDay.setTime(new Date());
 		preDay.add(Calendar.DAY_OF_YEAR, -1);
-		resultMap.put("dateTime", dailyDateTimeFormat.format(preDay.getTime()));
+		resultMap.put("datetime", dailyDateTimeFormat.format(preDay.getTime()));
 	}
 
 	private void weeklyDateTime() {
@@ -177,7 +177,7 @@ public class ReportQuery {
 		preWeek.add(Calendar.DAY_OF_YEAR,
 				preWeek.getActualMaximum(Calendar.DAY_OF_WEEK) - 1);
 		String preWeekLastDay = weeklyDateTimeFormat.format(preWeek.getTime());
-		resultMap.put("dateTime", preWeekFirstDay + "-" + preWeekLastDay);
+		resultMap.put("datetime", preWeekFirstDay + "-" + preWeekLastDay);
 	}
 
 	private void monthlyDateTime() {
@@ -191,7 +191,7 @@ public class ReportQuery {
 				preMonth.getActualMaximum(Calendar.DAY_OF_MONTH) - 1);
 		String preMonthLastDay = monthlyDateTimeFormat.format(preMonth
 				.getTime());
-		resultMap.put("dateTime", preMonthFirstDay + "-" + preMonthLastDay);
+		resultMap.put("datetime", preMonthFirstDay + "-" + preMonthLastDay);
 	}
 	
 }
