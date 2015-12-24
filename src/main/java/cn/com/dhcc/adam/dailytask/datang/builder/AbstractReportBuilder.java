@@ -47,9 +47,13 @@ public class AbstractReportBuilder implements IReportBuilder {
 	public JasperReportBuilder build() {
 		JasperReportBuilder report = DynamicReports.report();
 		report.title(title(title)).title(overview(dateTime, overView))
-				.title(subReport(contents));
+				;//.title(subReport(contents));
 				//.pageFooter(pageFooter())
 				//.pageHeader(pageHeader());
+		ComponentBuilder<?, ?>[]  cba = subReport(contents);
+		for (ComponentBuilder<?, ?> cber : cba) {
+			report.title( cmp.horizontalList().add(cber).newFlowRow());
+		}
 		return report;
 	}
 
@@ -160,9 +164,8 @@ public class AbstractReportBuilder implements IReportBuilder {
 				.setAlignment(HorizontalAlignment.LEFT,
 						VerticalAlignment.MIDDLE).setFontSize(14).bold();
 
-		StyleBuilder detailsStyle = stl
-				.style(plainStyle).setFontSize(16)
-				.setPadding(2 * 14);//.setFirstLineIndent(2 * 14);
+		StyleBuilder detailsStyle = 
+				stl.style(plainStyle).setFontSize(16).setPadding(2 * 16);//.setAlignment(HorizontalAlignment.LEFT, VerticalAlignment.TOP);//.setFirstLineIndent(2 * 14);
 		//StyleBuilder dataStyle = stl.style(plainStyle).underline().setFontSize(16);
 		int counter = 0;
 		/**
