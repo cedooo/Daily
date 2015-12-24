@@ -66,8 +66,13 @@ public class ReportQuery {
 	 * @return 结果
 	 */
 	public String query(String attribute) {
-		Object value = resultMap.get(attribute.trim());
-		boolean valueValid = value!=null&&!("".equals(value.toString()));
+		boolean valueValid = false;
+		Object value = "____";
+		if(attribute!=null&&!"".equals(attribute.trim())){
+			attribute=production?attribute.trim().toLowerCase():attribute;
+			value = resultMap.get(attribute);
+			valueValid = value!=null&&!("".equals(value.toString()));
+		}
 		return valueValid?value.toString():"____";
 	}
 
