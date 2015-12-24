@@ -165,7 +165,7 @@ public class AbstractReportBuilder implements IReportBuilder {
 						VerticalAlignment.MIDDLE).setFontSize(14).bold();
 
 		StyleBuilder detailsStyle = 
-				stl.style(plainStyle).setFontSize(16).setPadding(2 * 16);//.setAlignment(HorizontalAlignment.LEFT, VerticalAlignment.TOP);//.setFirstLineIndent(2 * 14);
+				stl.style(plainStyle).setFontSize(14).setPadding(2 * 14);//.setAlignment(HorizontalAlignment.LEFT, VerticalAlignment.TOP);//.setFirstLineIndent(2 * 14);
 		//StyleBuilder dataStyle = stl.style(plainStyle).underline().setFontSize(16);
 		int counter = 0;
 		/**
